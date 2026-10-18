@@ -1,5 +1,4 @@
 import {useState, useEffect} from "react";
-import { useEffect, useState } from "react";
 
 const API = "https://yanethm-sintonia-api.fly.dev/api/v1/textos";
 const CLAVES_MENU = ["descubrir", "planes", "paraArtistas", "ayuda"];
