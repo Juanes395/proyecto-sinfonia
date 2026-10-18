@@ -10,8 +10,6 @@ function validarTextos(datos) {
     nav?.logo?.texto,
     nav?.logo?.aria,
     ...CLAVES_MENU.map((clave) => nav?.enlaces?.invitado?.[clave]),
-    nav?.buscador?.placeholder,
-    nav?.buscador?.borrar,
     nav?.botones?.invitado?.ingresar,
     nav?.botones?.invitado?.crearCuenta,
   ];

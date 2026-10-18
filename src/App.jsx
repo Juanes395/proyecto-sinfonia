@@ -11,7 +11,6 @@ export default function App() {
   // Idioma inicial por defecto: español
   const [idioma, setIdioma] = useState("es");
   const [activo, setActivo] = useState(leerSeccion);
-  const [consulta, setConsulta] = useState("");
   const [textoGrande, setTextoGrande] = useState(false);
 
   // Consumimos el hook conectado a la API de Sintonía
@@ -40,12 +39,6 @@ export default function App() {
     };
   }, [textoGrande]);
 
-  function buscar(valor) {
-    setConsulta(valor);
-    setActivo("descubrir");
-    window.history.replaceState(null, "", "#descubrir");
-  }
-
   return (
     <>
       <Navbar
@@ -53,19 +46,9 @@ export default function App() {
         idioma={idioma}
         cambiarIdioma={setIdioma}
         activo={activo}
-        onBuscar={buscar}
         textoGrande={textoGrande}
         alternarTexto={() => setTextoGrande((valor) => !valor)}
       />
-
-      {/* Contenedor de prueba temporal para ver qué sección estamos navegando */}
-      <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto" }}>
-        {consulta && (
-          <p style={{ color: "var(--marca-primario)" }}>
-            Buscando: <strong>{consulta}</strong>
-          </p>
-        )}
-      </main>
     </>
   );
 }

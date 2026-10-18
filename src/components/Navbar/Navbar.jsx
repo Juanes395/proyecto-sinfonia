@@ -9,11 +9,9 @@ const DESTINOS = {
     ayuda: "#ayuda",
 };
 
-export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo, onBuscar, textoGrande, alternarTexto, }) {
+export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo, textoGrande, alternarTexto, }) {
     const [abierto, setAbierto] = useState(false);
-    const [busqueda, setBusqueda] = useState("");
     const botonMenu = useRef(null);
-    const campoBusqueda = useRef(null);
 
     const nav = textos?.navbar;
     const ingles = idioma === "en";
@@ -38,19 +36,6 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
         return () => document.removeEventListener("keydown", cerrarConEscape);
     }, [abierto]);
 
-    function abrirBusqueda() {
-        setAbierto(true);
-        requestAnimationFrame(() => campoBusqueda.current?.focus());
-    }
-
-    function buscar(evento) {
-        evento.preventDefault();
-        const consulta = busqueda.trim();
-        if (!consulta) return;
-        if (onBuscar) onBuscar(consulta);
-        setAbierto(false);
-    }
-
     return (
         <header className="navbar">
             <nav
@@ -69,15 +54,6 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
 
                 {/* ACCIONES MÓVIL (Buscador y botón de menú) */}
                 <div className="navbar-movil-acciones">
-                    <button
-                        type="button"
-                        className="navbar-icono"
-                        aria-label={nav?.buscador?.placeholder ?? "Buscar"}
-                        disabled={!nav}
-                        onClick={abrirBusqueda}
-                    >
-                        <Icono nombre="buscar" />
-                    </button>
                     <button
                         ref={botonMenu}
                         type="button"
@@ -131,27 +107,8 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                                         </a>
                                     </li>
                                 ))}
-                            </ul>
-
-                            {/* BUSCADOR */}
-                            <form
-                                className="navbar-buscador"
-                                role="search"
-                                onSubmit={buscar}
-                            >
-                                <button type="submit" aria-label="Buscar">
-                                    <Icono nombre="buscar" />
-                                </button>
-                                <input
-                                    ref={campoBusqueda}
-                                    type="search"
-                                    value={busqueda}
-                                    onChange={(evento) => setBusqueda(evento.target.value)}
-                                    placeholder={nav.buscador.placeholder}
-                                    aria-label={nav.buscador.placeholder}
-                                    required
-                                />
-                            </form>
+                            </ul>                              
+                            
                         </>
                     )}
 
