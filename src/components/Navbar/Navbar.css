@@ -98,7 +98,6 @@
   cursor: wait;
 }
 
-/* PANEL COLAPSABLE (MÓVIL) */
 .navbar-panel {
   display: none;
   width: 100%;
@@ -114,7 +113,6 @@
   gap: 20px;
 }
 
-/* ENLACES DE NAVEGACIÓN */
 .navbar-enlaces {
   display: flex;
   flex-direction: column;
@@ -147,7 +145,6 @@
   text-underline-offset: 6px;
 }
 
-/* UTILIDADES (IDIOMA, ACCESIBILIDAD, BOTONES) */
 .navbar-utilidades {
   display: flex;
   flex-wrap: wrap;
@@ -216,7 +213,6 @@
   transition: background 150ms ease, color 150ms ease;
 }
 
-/* Ingresar: sutil / secundario */
 .navbar-accion-secundaria {
   color: var(--texto-principal);
   background: transparent;
@@ -226,7 +222,6 @@
   background: var(--fondo-sutil);
 }
 
-/* Crear cuenta: destacado con el verde lima de Sintonía */
 .navbar-accion-primaria {
   color: var(--texto-sobre-marca);
   background: var(--marca-primario);
@@ -236,7 +231,7 @@
   background: var(--marca-primario-hover);
 }
 
-/* ESTADOS DE CARGA Y ERROR */
+
 .navbar-estado {
   margin: 0;
   font-size: 0.875rem;

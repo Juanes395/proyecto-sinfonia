@@ -52,7 +52,7 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                     <Icono nombre="logo" />
                 </a>
 
-                {/* ACCIONES MÓVIL (Buscador y botón de menú) */}
+                {/* ACCIONES MÓVIL  */}
                 <div className="navbar-movil-acciones">
                     <button
                         ref={botonMenu}
@@ -67,7 +67,7 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                     </button>
                 </div>
 
-                {/* PANEL PRINCIPAL (Enlaces, Buscador y Utilidades) */}
+                {/* PANEL PRINCIPAL */}
                 <div
                     id="navbar-panel"
                     className={`navbar-panel${abierto ? " is-abierto" : ""}`}
