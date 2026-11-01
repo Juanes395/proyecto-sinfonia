@@ -1,25 +1,6 @@
 import {useState, useEffect} from "react";
 
-const API = "https://yanethm-sintonia-api.fly.dev/api/v1/textos";
-const CLAVES_MENU = ["descubrir", "planes", "paraArtistas", "ayuda"];
-
-function validarTextos(datos) {
-  const nav = datos?.textos?.navbar;
-
-  const etiquetas = [
-    nav?.logo?.texto,
-    nav?.logo?.aria,
-    ...CLAVES_MENU.map((clave) => nav?.enlaces?.invitado?.[clave]),
-    nav?.botones?.invitado?.ingresar,
-    nav?.botones?.invitado?.crearCuenta,
-  ];
-
-  if (!etiquetas.every((valor) => typeof valor === "string" && valor.trim())) {
-    throw new Error("La respuesta no contiene los textos requeridos del navbar.");
-  }
-
-  return datos.textos;
-}
+const API_BASE = import.meta.env.VITE_API_URL || "https://yanethm-sintonia-api.fly.dev/api/v1";
 
 export function useTextos(idioma = "es") {
   const [textos, setTextos] = useState(null);
@@ -36,30 +17,34 @@ export function useTextos(idioma = "es") {
     setError(false);
     setTextos(null);
 
-    async function cargarTextosNavbar() {
+    async function cargarTextos(){
       try {
-        const respuesta = await fetch(`${API}?idioma=${idioma}`, {
+        const respuesta = await fetch(`${API_BASE}/textos?idioma=${idioma}`, {
           signal: controlador.signal,
         });
-
-        if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-
-        const datos = await respuesta.json();
-        const nuevosTextos = validarTextos(datos);
-
-        if (vigente) setTextos(nuevosTextos);
-      } catch (err) {
-        if (vigente) {
-          console.error("Error al cargar los textos: ", err);
-          setError(true);
+        if (!respuesta.ok) {
+          throw new Error(`Error HTTP: ${respuesta.status}`);
         }
-      } finally {
+        const datos = await respuesta.json();
+        
+        const contenido = datos?.textos ?? datos;
+        if (vigente) {
+          setTextos(contenido);
+          setCargando(false);
+        }     
+      }catch (err) {
+        if (vigente) {
+          setError(true);
+          setCargando(false);
+        }
+      }finally {
         clearTimeout(limite);
-        if (vigente) setCargando(false);
+        if (vigente) {
+          setCargando(false);
+        }
       }
     }
-
-    cargarTextosNavbar();
+    cargarTextos();
 
     return () => {
       vigente = false;
