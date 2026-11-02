@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar/Navbar.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 import { useTextos } from "./hooks/useTextos.js";
 
 
@@ -59,6 +60,16 @@ export default function App() {
       <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto", color: "var(--texto-principal)" }}>
         <p>Vista activa: <strong>{activo}</strong></p>
       </main>
+      <Footer
+        textos={textos}
+        onNavegar={(destino) => {
+          setActivo(destino);
+          window.location.hash = destino;
+        }}
+        onAbrirAccesibilidad={() =>
+          console.log("Abrir panel de accesibilidad desde Footer")
+        } 
+      />
     </>
   );
 }
