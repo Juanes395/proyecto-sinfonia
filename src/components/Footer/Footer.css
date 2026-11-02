@@ -1,0 +1,146 @@
+.foot {
+  background: var(--fondo-superficie);
+  border-top: 1px solid var(--borde-sutil);
+  color: var(--texto-secundario);
+  font-family: var(--fuente-inter);
+  padding-block: var(--espacio-12) var(--espacio-8);
+  width: 100%;
+}
+
+/* Interior centrado que respeta el ancho máximo del diseño */
+.foot-interior {
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+}
+
+/* Disposición superior: Marca + Columnas */
+.foot-principal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+}
+
+/* Bloque del logo y lema */
+.foot-identidad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  max-width: 300px;
+}
+
+.foot-marca {
+  display: inline-flex;
+  align-items: center;
+  color: var(--texto-principal);
+  text-decoration: none;
+}
+
+.foot-lema {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--texto-terciario);
+}
+
+/* Grilla de columnas de enlaces en móvil y desktop */
+.foot-columnas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--espacio-6);
+}
+
+.foot-columna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+}
+
+/* Encabezados de columna */
+.foot-columna-titulo {
+  margin: 0;
+  font-family: var(--fuente-syne);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--texto-principal);
+}
+
+/* Lista de enlaces */
+.foot-enlaces {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.foot-enlaces a,
+.foot-boton-enlace {
+  color: var(--texto-secundario);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 150ms ease;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.foot-enlaces a:hover,
+.foot-boton-enlace:hover {
+  color: var(--texto-principal);
+}
+
+/* Línea divisoria */
+.foot-divisor {
+  border: 0;
+  border-top: 1px solid var(--borde-sutil);
+  margin: 0;
+}
+
+/* Bloque inferior de créditos y derechos */
+.foot-inferior {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  font-size: 0.75rem;
+  color: var(--texto-terciario);
+}
+
+.foot-derechos,
+.foot-nota {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* VISTA DE ESCRITORIO (>= 768px) */
+@media (min-width: 768px) {
+  .foot-principal {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .foot-columnas {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: var(--espacio-12);
+  }
+  .foot-columna {
+    min-width: 120px;
+  }
+
+  .foot-inferior {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
