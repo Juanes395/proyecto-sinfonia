@@ -2,159 +2,207 @@ import { useEffect, useRef, useState } from "react";
 import Icono from "../Icono.jsx";
 import "./Navbar.css";
 
-const DESTINOS = {
-    descubrir: "#descubrir",
-    planes: "#planes",
-    paraArtistas: "#para-artistas",
-    ayuda: "#ayuda",
-};
 
-export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo, textoGrande, alternarTexto, }) {
-    const [abierto, setAbierto] = useState(false);
-    const botonMenu = useRef(null);
+export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo = "inicio", onNavegar, onAbrirAccesibilidad }) {
+    const [menuAbierto, setMenuAbierto] = useState(false);
+    const botonMenuRef = useRef(null);
 
     const nav = textos?.navbar;
-    const ingles = idioma === "en";
-
-    // Textos para accesibilidad del botón móvil (si vienen en la API o fallback)
-    const abrir = textos?.menuMovil?.abrir ?? (ingles ? "Open menu" : "Abrir menú");
-    const cerrar = textos?.menuMovil?.cerrar ?? (ingles ? "Close menu" : "Cerrar menú");
-
-    // Filtramos los enlaces de invitado
-    const enlaces = Object.entries(nav?.enlaces?.invitado ?? {}).filter(
-        ([clave]) => DESTINOS[clave]
-    );
+    const menuMovil = textos?.menuMovil;
+    // Enlaces y botones principales
+    const txtInicio = nav?.enlaces?.inicio;
+    const txtCatalogo = nav?.enlaces?.catalogo;
+    const txtIngresar = nav?.botones?.invitado?.ingresar;
+    const txtCrearCuenta = nav?.botones?.invitado?.crearCuenta;
+    // Atributos de accesibilidad (Aria)
+    const ariaNav = nav?.aria?.navegacion;
+    const ariaLogo = nav?.logo?.aria;
+    const ariaIdioma = nav?.aria?.idioma;
+    const ariaAccesibilidad = nav?.aria?.accesibilidad;
+    const ariaAbrirMenu = menuMovil?.abrir;
+    const ariaCerrarMenu = menuMovil?.cerrar;
+    // Etiquetas para la vista de menú en celular
+    const etiquetaIdioma = menuMovil?.secciones?.idioma;
+    const etiquetaAccesibilidad = menuMovil?.secciones?.accesibilidad;
 
     useEffect(() => {
         function cerrarConEscape(evento) {
-            if (evento.key === "Escape" && abierto) {
-                setAbierto(false);
-                botonMenu.current?.focus();
+            if (evento.key === "Escape" && menuAbierto) {
+                setMenuAbierto(false);
+                botonMenuRef.current?.focus();
             }
         }
         document.addEventListener("keydown", cerrarConEscape);
         return () => document.removeEventListener("keydown", cerrarConEscape);
-    }, [abierto]);
+    }, [menuAbierto]);
 
+    function navegarA(destino) {
+        setMenuAbierto(false);
+        if (onNavegar) {
+            onNavegar(destino);
+        }
+    }
     return (
         <header className="navbar">
-            <nav
-                className="navbar-interior"
-                aria-label={nav?.aria?.navegacion ?? "Navegación principal"}
-            >
+            <nav className="navbar-interior" aria-label={ariaNav}>
                 {/* LOGO */}
                 <a
                     className="navbar-marca"
                     href="#inicio"
-                    aria-label={nav?.logo?.aria ?? "sintonía, ir al inicio"}
-                    onClick={() => setAbierto(false)}
+                    aria-label={ariaLogo}
+                    onClick={() => navegarA("inicio")}
                 >
                     <Icono nombre="logo" />
                 </a>
 
                 {/* ACCIONES MÓVIL  */}
                 <div className="navbar-movil-acciones">
+                    {txtIngresar && (
+                        <a
+                            className="navbar-enlace-login-movil"
+                            href="#ingresar"
+                            onClick={() => navegarA("ingresar")}
+                        >
+                            {txtIngresar}
+                        </a>
+                    )}
                     <button
-                        ref={botonMenu}
+                        ref={botonMenuRef}
                         type="button"
                         className="navbar-icono"
-                        aria-label={abierto ? cerrar : abrir}
-                        aria-expanded={abierto}
-                        aria-controls="navbar-panel"
-                        onClick={() => setAbierto((valor) => !valor)}
+                        aria-label={menuAbierto ? ariaCerrarMenu : ariaAbrirMenu}
+                        aria-expanded={menuAbierto}
+                        aria-controls="navbar-menu-panel"
+                        onClick={() => setMenuAbierto((valor) => !valor)}
                     >
-                        <Icono nombre={abierto ? "cerrar" : "menu"} />
+                        <Icono nombre={menuAbierto ? "cerrar" : "menu"} />
                     </button>
                 </div>
 
                 {/* PANEL PRINCIPAL */}
                 <div
-                    id="navbar-panel"
-                    className={`navbar-panel${abierto ? " is-abierto" : ""}`}
+                    id="navbar-menu-panel"
+                    className={`navbar-panel${menuAbierto ? " is-abierto" : ""}`}
                     aria-busy={cargando}
                 >
-                    {cargando && (
-                        <p className="navbar-estado" role="status">
-                            {ingles ? "Loading navigation…" : "Cargando navegación…"}
-                        </p>
-                    )}
-
-                    {error && (
-                        <div className="navbar-estado" role="alert">
-                            <p>
-                                {ingles
-                                    ? "Navigation could not be loaded."
-                                    : "No pudimos cargar el menú."}
-                            </p>
-                            <button type="button" onClick={recargar}>
-                                {ingles ? "Try again" : "Reintentar"}
-                            </button>
-                        </div>
-                    )}
-
-                    {nav && (
-                        <>
-                            {/* ENLACES DEL MENÚ */}
-                            <ul className="navbar-enlaces">
-                                {enlaces.map(([clave, etiqueta]) => (
-                                    <li key={clave}>
-                                        <a
-                                            href={DESTINOS[clave]}
-                                            aria-current={activo === clave ? "page" : undefined}
-                                            onClick={() => setAbierto(false)}
-                                        >
-                                            {etiqueta}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>                              
-                            
-                        </>
-                    )}
-
+                    {/*Cabecera movil*/}
+                    <div className="navbar-panel-cabecera-movil">
+                        <a
+                            className="navbar-marca"
+                            href="#inicio"
+                            aria-label={ariaLogo}
+                            onClick={() => navegarA("inicio")}
+                        >
+                            <Icono nombre="logo" />
+                        </a>
+                        <button
+                            type="button"
+                            className="navbar-icono"
+                            aria-label={ariaCerrarMenu}
+                            onClick={() => setMenuAbierto(false)}
+                        >
+                            <Icono nombre="cerrar" />
+                        </button>
+                    </div>
+                    {/* Enlaces de navegación */}
+                    <ul className="navbar-enlaces">
+                        {txtInicio && (
+                            <li>
+                                <a
+                                    href="#inicio"
+                                    aria-current={activo === "inicio" ? "page" : undefined}
+                                    onClick={() => navegarA("inicio")}
+                                >
+                                    {txtInicio}
+                                </a>
+                            </li>
+                        )}
+                        {txtCatalogo && (
+                            <li>
+                                <a
+                                    href="#catalogo"
+                                    aria-current={activo === "catalogo" ? "page" : undefined}
+                                    onClick={() => navegarA("catalogo")}
+                                >
+                                    {txtCatalogo}
+                                </a>
+                            </li>
+                        )}
+                    </ul>
                     {/* BOTONES Y UTILIDADES */}
                     <div className="navbar-utilidades">
-                        <label className="navbar-idioma">
-                            <Icono nombre="idioma" />
-                            <select
-                                value={idioma}
-                                onChange={(evento) => cambiarIdioma(evento.target.value)}
-                                aria-label={nav?.aria?.idioma ?? "Cambiar idioma"}
+                        {/* Control de idioma (ES | EN) */}
+                        <div className="navbar-utilidad-item">
+                            {etiquetaIdioma && (
+                                <span className="navbar-utilidad-etiqueta-movil">
+                                    {etiquetaIdioma}
+                                </span>
+                            )}
+                            <div
+                                className="navbar-idioma-pill"
+                                role="radiogroup"
+                                aria-label={ariaIdioma}
                             >
-                                <option value="es">ES</option>
-                                <option value="en">EN</option>
-                            </select>
-                        </label>
-
-                        <button
-                            className="navbar-icono navbar-accesibilidad"
-                            type="button"
-                            aria-label={ingles ? "Enlarge text" : "Aumentar texto"}
-                            aria-pressed={textoGrande}
-                            onClick={alternarTexto}
-                        >
-                            <Icono nombre="accesibilidad" />
-                        </button>
-
-                        {/* BOTONES DE INVITADO: Ingresar y Crear cuenta */}
-                        {nav && (
-                            <div className="navbar-botones-sesion">
-                                <a
-                                    className="navbar-accion navbar-accion-secundaria"
-                                    href="#ingresar"
-                                    onClick={() => setAbierto(false)}
+                                <button
+                                    type="button"
+                                    role="radio"
+                                    aria-checked={idioma === "es"}
+                                    className={`navbar-idioma-btn ${idioma === "es" ? "is-activo" : ""}`}
+                                    onClick={() => cambiarIdioma("es")}
                                 >
-                                    {nav.botones.invitado.ingresar}
-                                </a>
-                                <a
-                                    className="navbar-accion navbar-accion-primaria"
-                                    href="#crear-cuenta"
-                                    onClick={() => setAbierto(false)}
+                                    ES
+                                </button>
+                                <button
+                                    type="button"
+                                    role="radio"
+                                    aria-checked={idioma === "en"}
+                                    className={`navbar-idioma-btn ${idioma === "en" ? "is-activo" : ""}`}
+                                    onClick={() => cambiarIdioma("en")}
                                 >
-                                    {nav.botones.invitado.crearCuenta}
-                                </a>
+                                    EN
+                                </button>
                             </div>
-                        )}
+                        </div>
+                        {/* Botón de opciones de accesibilidad */}
+                        <div className="navbar-utilidad-item">
+                            {etiquetaAccesibilidad && (
+                                <span className="navbar-utilidad-etiqueta-movil">
+                                    {etiquetaAccesibilidad}
+                                </span>
+                            )}
+                            <button
+                                type="button"
+                                className="navbar-icono navbar-icono-accesibilidad"
+                                aria-label={ariaAccesibilidad}
+                                onClick={() => {
+                                    setMenuAbierto(false);
+                                    if (onAbrirAccesibilidad) onAbrirAccesibilidad();
+                                }}
+                            >
+                                <Icono nombre="accesibilidad" />
+                            </button>
+                        </div>
+                        {/* BOTONES DE INVITADO: Ingresar y Crear cuenta */}
+                        <div className="navbar-botones-sesion">
+                            {txtCrearCuenta && (
+                                <a
+                                    href="#crear-cuenta"
+                                    className="navbar-accion navbar-accion-primaria"
+                                    onClick={() => navegarA("crear-cuenta")}
+                                >
+                                    {txtCrearCuenta}
+                                </a>
+                            )}
+                            {txtIngresar && (
+                                <a
+                                    href="#ingresar"
+                                    className="navbar-accion navbar-accion-secundaria"
+                                    onClick={() => navegarA("ingresar")}
+                                >
+                                    {txtIngresar}
+                                </a>
+                            )}
+                        </div>
                     </div>
                 </div>
             </nav>

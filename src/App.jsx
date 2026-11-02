@@ -4,7 +4,7 @@ import { useTextos } from "./hooks/useTextos.js";
 
 
 function leerSeccion() {
-  return window.location.hash.slice(1) || "descubrir";
+  return window.location.hash.slice(1) || "inicio";
 }
 
 export default function App() {
@@ -14,13 +14,12 @@ export default function App() {
   const [textoGrande, setTextoGrande] = useState(false);
 
   // Consumimos el hook conectado a la API de Sintonía
-  const datos = useTextos(idioma);
+  const { textos, cargando, error, recargar } = useTextos(idioma);
 
-  // Sincroniza la sección activa con el historial de navegación (#hash)
+  // Sincroniza la sección activa con la URL (HASH)
   useEffect(() => {
     function actualizar() {
       setActivo(leerSeccion());
-      setConsulta("");
     }
     window.addEventListener("hashchange", actualizar);
     return () => window.removeEventListener("hashchange", actualizar);
@@ -42,13 +41,24 @@ export default function App() {
   return (
     <>
       <Navbar
-        {...datos}
+        textos={textos}
+        cargando={cargando}
+        error={error}
+        recargar={recargar}
         idioma={idioma}
         cambiarIdioma={setIdioma}
         activo={activo}
-        textoGrande={textoGrande}
-        alternarTexto={() => setTextoGrande((valor) => !valor)}
+        onNavegar={(destino) => {
+          setActivo(destino);
+          window.location.hash = destino;
+        }}
+        onAbrirAccesibilidad={() =>
+          console.log("Abrir panel de accesibilidad")
+        }
       />
+      <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto", color: "var(--texto-principal)" }}>
+        <p>Vista activa: <strong>{activo}</strong></p>
+      </main>
     </>
   );
 }
