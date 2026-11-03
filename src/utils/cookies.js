@@ -12,3 +12,9 @@ export function leerCookie(nombre) {
     // Si no se encuentra la cookie, retornamos null
     return null;
 }
+
+export function guardarCookie(nombre, valor, dias = 365) {
+    // Calculamos la fecha de expiración sumando los días al momento actual
+    const segundos = dias * 24 * 60 * 60 ; // Días a segundos
+    document.cookie = `${nombre}=${encodeURIComponent(valor)}; max-age=${segundos}; path=/; SameSite=Lax`;
+}
