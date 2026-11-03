@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 
-const API_BASE = import.meta.env.VITE_API_URL || "https://yanethm-sintonia-api.fly.dev/api/v1";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export function useTextos(idioma = "es") {
   const [textos, setTextos] = useState(null);
