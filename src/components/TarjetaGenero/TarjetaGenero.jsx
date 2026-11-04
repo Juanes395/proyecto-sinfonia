@@ -37,7 +37,7 @@ export default function TarjetaGenero({ genero, indice = 0, onSeleccionar }) {
       {/* Nombre del género con tipografía Syne en negrita */}
       <span className="tarjeta-genero-nombre">{genero.nombre}</span>
 
-      {/* Ilustración geométrica decorativa de fondo (cero fotos) */}
+      {/* Ilustración geométrica decorativa de fondo */}
       <span className="tarjeta-genero-adorno" aria-hidden="true" />
     </a>
   );

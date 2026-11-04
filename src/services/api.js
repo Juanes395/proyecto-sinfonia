@@ -8,8 +8,11 @@ export async function obtenerGeneros(signal) {
     throw new Error(`Error al cargar géneros: HTTP ${respuesta.status}`);
   }
   // Convertimos a JSON y devolvemos la propiedad 'generos' del backend
-  const datos = await respuesta.json();
-  return datos?.generos ?? datos;
+  const json = await respuesta.json();
+  if (Array.isArray(json)) return json;
+  if (Array.isArray(json?.datos)) return json.datos;
+  if (Array.isArray(json?.generos)) return json.generos;
+  return [];
 }
 
 // Función para obtener el detalle de un género específico con sus álbumes y pistas (GET /generos/:id)
@@ -18,6 +21,6 @@ export async function obtenerGeneroPorId(id, signal) {
   if (!respuesta.ok) {
     throw new Error(`Error al cargar género ${id}: HTTP ${respuesta.status}`);
   }
-  const datos = await respuesta.json();
-  return datos?.genero ?? datos;
+  const json = await respuesta.json();
+  return json?.datos ?? json?.genero ?? json;
 }

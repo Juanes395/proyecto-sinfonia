@@ -85,6 +85,14 @@
   --estado-error: #c8322b;
   --estado-error-suave: #fbe1df;
 }
+body {
+  margin: 0;
+  background-color: var(--fondo-base);
+  color: var(--texto-principal);
+  font-family: var(--fuente-inter);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
 /* Estilos de texto de Figma como clases. */
 .titular-gigante { font-family: var(--fuente-syne); font-weight: 800; font-size: 120px; line-height: 108px; letter-spacing: -0.030em; }
