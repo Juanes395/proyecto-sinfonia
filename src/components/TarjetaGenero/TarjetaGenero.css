@@ -1,0 +1,53 @@
+/* Tarjeta de género individual */
+.tarjeta-genero {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: 96px;
+  padding: var(--espacio-4);
+  border-radius: var(--radio-lg);
+  text-decoration: none;
+  overflow: hidden;
+  box-shadow: var(--sombra-tarjeta);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  cursor: pointer;
+}
+
+/* Efecto hover: ligera elevación */
+.tarjeta-genero:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-flotante);
+}
+
+/* Foco visible accesible */
+.tarjeta-genero:focus-visible {
+  outline: 3px solid var(--fijo-blanco);
+  outline-offset: 2px;
+}
+
+/* Texto del género en alto contraste oscuro sobre el fondo de color */
+.tarjeta-genero-nombre {
+  font-family: var(--fuente-syne);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fijo-negro);
+  z-index: 2;
+}
+
+/* Adorno gráfico geométrico en la esquina inferior derecha */
+.tarjeta-genero-adorno {
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .tarjeta-genero {
+    min-height: 112px;
+  }
+}
