@@ -1,0 +1,374 @@
+/* Contenedor general del inicio con espaciados verticales amplios */
+.inicio-publico {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-16);
+  padding-block: var(--espacio-8);
+  width: 100%;
+}
+
+/* 1. HERO */
+.inicio-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+  align-items: center;
+}
+
+.inicio-hero-texto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  max-width: 42rem;
+}
+
+.inicio-hero-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--fuente-inter);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--marca-primario);
+  letter-spacing: 0.05em;
+}
+
+.inicio-hero-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 2.5rem;
+  line-height: 1.1;
+}
+
+.inicio-hero-subtitulo {
+  margin: 0;
+  color: var(--texto-secundario);
+}
+
+.inicio-hero-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  margin-top: var(--espacio-2);
+}
+
+.inicio-btn {
+  font-family: var(--fuente-inter);
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-height: 44px;
+  padding: var(--espacio-2) var(--espacio-6);
+  border-radius: var(--radio-completo);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.inicio-btn-primario {
+  background: var(--marca-primario);
+  border: 1px solid var(--marca-primario);
+  color: var(--texto-sobre-marca);
+}
+
+.inicio-btn-primario:hover {
+  background: var(--marca-primario-hover);
+}
+
+.inicio-btn-secundario {
+  background: transparent;
+  border: 1px solid var(--borde-fuerte);
+  color: var(--texto-principal);
+}
+
+.inicio-btn-secundario:hover {
+  background: var(--fondo-sutil);
+}
+
+/* Ilustración geométrica abstracta */
+.inicio-hero-grafico {
+  position: relative;
+  width: 280px;
+  height: 240px;
+  flex-shrink: 0;
+}
+
+.inicio-figura-1 {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  width: 180px;
+  height: 180px;
+  background: var(--portada-3);
+  border-radius: var(--radio-xl);
+}
+
+.inicio-figura-2 {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  background: var(--portada-5);
+  border-radius: var(--radio-lg);
+}
+
+.inicio-figura-3 {
+  position: absolute;
+  right: -10px;
+  bottom: 20px;
+  width: 140px;
+  height: 52px;
+  background: var(--marca-primario);
+  border-radius: var(--radio-md);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+/* 2. CIFRAS / MÉTRICAS */
+.inicio-cifras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-8);
+  align-items: baseline;
+  padding-block: var(--espacio-4);
+  border-bottom: 1px solid var(--borde-sutil);
+}
+
+.inicio-cifra-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.inicio-cifra-valor {
+  color: var(--marca-primario);
+}
+
+.inicio-cifra-etiqueta {
+  color: var(--texto-secundario);
+}
+
+/* 3. SECCIONES: ENCABEZADOS Y ENLACES */
+.inicio-seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+}
+
+.inicio-seccion-encabezado {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.inicio-seccion-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.inicio-seccion-enlace {
+  color: var(--texto-secundario);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.inicio-seccion-enlace:hover {
+  color: var(--marca-primario);
+}
+
+/* Grilla Suena esta semana */
+.inicio-destacados-grilla {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espacio-4);
+}
+
+.inicio-pista-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.inicio-pista-portada {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radio-lg);
+  overflow: hidden;
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.inicio-pista-adorno {
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.inicio-pista-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 0.9375rem;
+}
+
+.inicio-pista-artista {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.8125rem;
+}
+
+/* 4. Grilla Explora por género */
+.inicio-generos-grilla {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--espacio-4);
+}
+
+/* 5. BANNER CTA INFERIOR */
+.inicio-cta {
+  background: var(--marca-primario);
+  border-radius: var(--radio-xl);
+  padding: var(--espacio-8) var(--espacio-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6);
+  align-items: flex-start;
+  color: var(--texto-sobre-marca);
+}
+
+.inicio-cta-contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.inicio-cta-titulo {
+  margin: 0;
+  color: var(--fijo-negro);
+}
+
+.inicio-cta-texto {
+  margin: 0;
+  color: var(--fijo-negro);
+  opacity: 0.85;
+}
+
+.inicio-cta-btn {
+  background: var(--fijo-negro);
+  color: var(--texto-principal);
+  border: 0;
+  border-radius: var(--radio-completo);
+  min-height: 44px;
+  padding: var(--espacio-2) var(--espacio-6);
+  font-family: var(--fuente-inter);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+}
+
+.inicio-cta-btn:hover {
+  opacity: 0.85;
+}
+
+/* VISTA DE ESCRITORIO (>= 1024px) */
+@media (min-width: 1024px) {
+  .inicio-hero {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .inicio-hero-titulo {
+    font-size: 3.5rem;
+  }
+
+  .inicio-hero-grafico {
+    width: 380px;
+    height: 320px;
+  }
+
+  .inicio-destacados-grilla {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .inicio-generos-grilla {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .inicio-cta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio-12) var(--espacio-8);
+  }
+
+  .inicio-cta-btn {
+    flex-shrink: 0;
+  }
+}
+/* ==========================================================================
+   ADAPTACIÓN PARA CELULAR (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Separación vertical más compacta */
+  .inicio-publico {
+    gap: var(--espacio-10);
+    padding-block: var(--espacio-4);
+  }
+
+  /* 1. Hero apilado verticalmente */
+  .inicio-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espacio-6);
+  }
+
+  .inicio-hero-titulo {
+    font-size: 2.25rem;
+    line-height: 1.1;
+  }
+
+  .inicio-hero-botones {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .inicio-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Ilustración centrada en móvil */
+  .inicio-hero-grafico {
+    margin-inline: auto;
+    transform: scale(0.85);
+  }
+
+  /* 2. Cifras métricas */
+  .inicio-cifras {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--espacio-2);
+  }
+
+  .inicio-cifra-valor {
+    font-size: 1.5rem;
+  }
+
+  /* 3. Grillas de 2 columnas en móvil */
+  .inicio-destacados-grilla,
+  .inicio-generos-grilla {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--espacio-3);
+  }
+
+  /* 4. Banner CTA en una sola columna */
+  .inicio-cta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--espacio-4);
+  }
+
+  .inicio-cta-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

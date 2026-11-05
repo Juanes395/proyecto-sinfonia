@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import AvisoCookies from "./components/AvisoCookies/AvisoCookies.jsx";
+import InicioPublico from "./components/InicioPublico/InicioPublico.jsx";
 import { useTextos } from "./hooks/useTextos.js";
-import { leerCookie } from "./utils/cookies.js";
+import { leerCookie, guardarCookie } from "./utils/cookies.js";
 
 
 function leerSeccion() {
@@ -85,7 +86,23 @@ export default function App() {
         }
       />
       <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto", color: "var(--texto-principal)" }}>
-        <p>Vista activa: <strong>{activo}</strong></p>
+        {activo === "inicio" ? (
+          <InicioPublico
+            textos={textos}
+            onNavegar={(destino) => {
+              setActivo(destino);
+              window.location.hash = destino;
+            }}
+          />
+        ) : (
+          <div style={{ color: "var(--texto-principal)", paddingBlock: "4rem" }}>
+            <h2 className="titular-h2">Vista: {activo}</h2>
+            <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}>
+              En construcción :p.
+            </p>
+          </div>
+        )}
+
       </main>
       <Footer
         textos={textos}

@@ -131,6 +131,25 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                     </ul>
                     {/* BOTONES Y UTILIDADES */}
                     <div className="navbar-utilidades">
+                        {/* Botón de opciones de accesibilidad */}
+                        <div className="navbar-utilidad-item">
+                            {etiquetaAccesibilidad && (
+                                <span className="navbar-utilidad-etiqueta-movil">
+                                    {etiquetaAccesibilidad}
+                                </span>
+                            )}
+                            <button
+                                type="button"
+                                className="navbar-icono navbar-icono-accesibilidad"
+                                aria-label={ariaAccesibilidad}
+                                onClick={() => {
+                                    setMenuAbierto(false);
+                                    if (onAbrirAccesibilidad) onAbrirAccesibilidad();
+                                }}
+                            >
+                                <Icono nombre="accesibilidad" />
+                            </button>
+                        </div>
                         {/* Control de idioma (ES | EN) */}
                         <div className="navbar-utilidad-item">
                             {etiquetaIdioma && (
@@ -162,25 +181,6 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                                     EN
                                 </button>
                             </div>
-                        </div>
-                        {/* Botón de opciones de accesibilidad */}
-                        <div className="navbar-utilidad-item">
-                            {etiquetaAccesibilidad && (
-                                <span className="navbar-utilidad-etiqueta-movil">
-                                    {etiquetaAccesibilidad}
-                                </span>
-                            )}
-                            <button
-                                type="button"
-                                className="navbar-icono navbar-icono-accesibilidad"
-                                aria-label={ariaAccesibilidad}
-                                onClick={() => {
-                                    setMenuAbierto(false);
-                                    if (onAbrirAccesibilidad) onAbrirAccesibilidad();
-                                }}
-                            >
-                                <Icono nombre="accesibilidad" />
-                            </button>
                         </div>
                         {/* BOTONES DE INVITADO: Ingresar y Crear cuenta */}
                         <div className="navbar-botones-sesion">
