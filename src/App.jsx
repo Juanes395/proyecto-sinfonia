@@ -6,12 +6,20 @@ import InicioPublico from "./components/InicioPublico/InicioPublico.jsx";
 import { useTextos } from "./hooks/useTextos.js";
 import { leerCookie, guardarCookie } from "./utils/cookies.js";
 import Catalogo from "./components/Catalogo/Catalogo.jsx";
+import PanelAccesibilidad from "./components/PanelAccesibilidad/PanelAccesibilidad.jsx";
 
 
 function leerSeccion() {
   return window.location.hash.slice(1) || "inicio";
 }
-
+// Valores iniciales por defecto del panel de accesibilidad
+const ACC_INICIAL = {
+  tamanoTexto: 100,
+  altoContraste: false,
+  reducirMovimiento: false,
+  subrayarEnlaces: false,
+  espaciado: false,
+};
 export default function App() {
   // Estado para el consentimiento de cookies
   const [consentimiento, setConsentimiento] = useState(() => leerCookie("consentimiento"));
@@ -27,7 +35,10 @@ export default function App() {
     return "es";
   });
   const [activo, setActivo] = useState(leerSeccion);
-  const [textoGrande, setTextoGrande] = useState(false);
+// Estado para mostrar u ocultar el panel de accesibilidad
+  const [accAbierto, setAccAbierto] = useState(false);
+  // Estado con las opciones del panel de accesibilidad
+  const [preferenciasAcc, setPreferenciasAcc] = useState(ACC_INICIAL);
 
   // se consume el hook conectado a la API de Sintonía
   const { textos, cargando, error, recargar } = useTextos(idioma);
@@ -46,13 +57,23 @@ export default function App() {
     document.documentElement.lang = idioma;
   }, [idioma]);
 
-  // Aumenta el texto global si se activa la opción de accesibilidad
+ // Aplica el porcentaje de tamaño de texto elegido en el panel (90%, 100%, 110%, 120%)
   useEffect(() => {
-    document.documentElement.style.fontSize = textoGrande ? "112%" : "";
-    return () => {
-      document.documentElement.style.fontSize = "";
-    };
-  }, [textoGrande]);
+    document.documentElement.style.fontSize =
+      preferenciasAcc.tamanoTexto === 100 ? "" : `${preferenciasAcc.tamanoTexto}%`;
+  }, [preferenciasAcc.tamanoTexto]);
+  // Aplica los 4 switches en el <html> para que tengan efecto real en la interfaz
+useEffect(() => {
+  const raiz = document.documentElement;
+  raiz.dataset.altoContraste = preferenciasAcc.altoContraste;
+  raiz.dataset.reducirMovimiento = preferenciasAcc.reducirMovimiento;
+  raiz.dataset.subrayarEnlaces = preferenciasAcc.subrayarEnlaces;
+  raiz.dataset.espaciado = preferenciasAcc.espaciado;
+
+  if (consentimiento === "aceptadas") {
+    guardarCookie("accesibilidad", JSON.stringify(preferenciasAcc));
+  }
+}, [preferenciasAcc, consentimiento]);
   // Manejador centralizado para cambiar de idioma
   function manejarCambioIdioma(nuevoIdioma) {
     setIdioma(nuevoIdioma);
@@ -67,6 +88,9 @@ export default function App() {
     if (decision === "aceptadas") {
       guardarCookie("idioma", idioma);
     }
+  }
+  function cambiarPreferenciaAcc(clave, valor) {
+    setPreferenciasAcc((prev) => ({ ...prev, [clave]: valor }));
   }
   return (
     <>
@@ -83,8 +107,17 @@ export default function App() {
           window.location.hash = destino;
         }}
         onAbrirAccesibilidad={() =>
-          console.log("Abrir panel de accesibilidad")
+          setAccAbierto((prev) => !prev)
         }
+      />
+      {/* Panel flotante de accesibilidad */}
+      <PanelAccesibilidad
+        textos={textos}
+        abierto={accAbierto}
+        onCerrar={() => setAccAbierto(false)}
+        preferencias={preferenciasAcc}
+        onCambiar={cambiarPreferenciaAcc}
+        onRestablecer={() => setPreferenciasAcc(ACC_INICIAL)}
       />
       <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto", color: "var(--texto-principal)" }}>
         {activo === "inicio" && (
