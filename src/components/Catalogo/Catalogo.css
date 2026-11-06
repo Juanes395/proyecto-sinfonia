@@ -1,0 +1,233 @@
+/* ==========================================================================
+   VISTA 2: CATÁLOGO MUSICAL (Escritorio 1440 px por defecto)
+   ========================================================================== */
+
+.catalogo-vista {
+  width: 100%;
+  padding-block: var(--espacio-4) var(--espacio-12);
+}
+
+/* Caja contenedora oscura redondeada  */
+.catalogo-contenedor {
+  background-color: var(--fondo-superficie);
+  border: 1px solid var(--borde-sutil);
+  border-radius: var(--radio-xl);
+  padding: var(--espacio-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-8);
+}
+
+/* 1. ENCABEZADO */
+.catalogo-encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.catalogo-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.catalogo-subtitulo {
+  margin: 0;
+  color: var(--texto-secundario);
+}
+
+/* 2. SECCIONES GENERALES */
+.catalogo-seccion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.catalogo-seccion-encabezado {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+}
+
+.catalogo-seccion-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.catalogo-enlace-verde {
+  color: var(--marca-primario);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.catalogo-enlace-verde:hover {
+  text-decoration: underline;
+}
+
+/* Grilla de 12 géneros */
+.catalogo-generos-grilla {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espacio-4);
+}
+
+/* Grilla de álbumes destacados: */
+.catalogo-albumes-grilla {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--espacio-4);
+}
+
+/* 3. SECCIÓN ARTISTAS DEL GÉNERO  */
+.catalogo-artistas-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-6);
+}
+
+.catalogo-artista-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--espacio-2);
+  width: 140px;
+}
+
+.catalogo-artista-avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.catalogo-artista-nombre {
+  margin: 0;
+  color: var(--texto-principal);
+  font-size: 0.9375rem;
+}
+
+.catalogo-artista-etiqueta {
+  color: var(--texto-secundario);
+}
+
+/* 4. FILA DE ÁLBUMES DEL GÉNERO SELECCIONADO */
+.catalogo-albumes-genero-fila {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espacio-4);
+}
+
+.catalogo-albumes-genero-fila > * {
+  width: 160px;
+}
+
+/* 5. LISTA NUMERADA DE CANCIONES MÁS ESCUCHADAS */
+.catalogo-canciones-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.catalogo-cancion-fila {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-2);
+  border-bottom: 1px solid var(--borde-sutil);
+  transition: background-color 150ms ease;
+}
+
+.catalogo-cancion-fila:hover {
+  background-color: var(--fondo-elevada);
+}
+
+.catalogo-cancion-numero {
+  width: 24px;
+  color: var(--texto-terciario);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.catalogo-cancion-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.catalogo-cancion-titulo {
+  color: var(--texto-principal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.catalogo-cancion-artista {
+  color: var(--texto-secundario);
+}
+
+.catalogo-cancion-duracion {
+  color: var(--texto-terciario);
+  flex-shrink: 0;
+}
+
+/* Estados informativos */
+.catalogo-mensaje {
+  color: var(--texto-secundario);
+  margin: 0;
+}
+
+.catalogo-error {
+  color: var(--estado-error);
+}
+
+.catalogo-vacio {
+  padding-block: var(--espacio-6);
+  color: var(--texto-secundario);
+}
+
+/* ==========================================================================
+   ADAPTACIÓN PARA CELULAR (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .catalogo-contenedor {
+    padding: var(--espacio-4);
+    border-radius: var(--radio-lg);
+    gap: var(--espacio-6);
+  }
+
+  /* En celular: 2 columnas para géneros y álbumes */
+  .catalogo-generos-grilla,
+  .catalogo-albumes-grilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-3);
+  }
+
+  .catalogo-artistas-lista {
+    gap: var(--espacio-4);
+  }
+
+  .catalogo-artista-card {
+    width: 110px;
+  }
+
+  .catalogo-artista-avatar {
+    width: 96px;
+    height: 96px;
+  }
+
+  .catalogo-albumes-genero-fila {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--espacio-3);
+  }
+
+  .catalogo-albumes-genero-fila > * {
+    width: 100%;
+  }
+}
