@@ -1,0 +1,233 @@
+/* Fondo transparente para detectar clic afuera y posicionar debajo de la barra */
+.panel-acc-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 72px;
+  padding-inline: var(--espacio-4);
+}
+
+/* Tarjeta flotante oscura según Figma */
+.panel-acc-dialogo {
+  width: 100%;
+  max-width: 360px;
+  background-color: var(--fondo-superficie);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-flotante);
+  padding: var(--espacio-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  color: var(--texto-principal);
+}
+
+/* 1. Encabezado */
+.panel-acc-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-acc-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.panel-acc-cerrar {
+  background: transparent;
+  border: 0;
+  color: var(--texto-secundario);
+  cursor: pointer;
+  padding: var(--espacio-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radio-sm);
+}
+
+.panel-acc-cerrar:hover {
+  color: var(--texto-principal);
+  background-color: var(--fondo-sutil);
+}
+
+/* 2. Bloque Tamaño del texto */
+.panel-acc-bloque-tamano {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+}
+
+.panel-acc-subtitulo {
+  color: var(--texto-principal);
+}
+
+.panel-acc-control-tamano {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--fondo-base);
+  border: 1px solid var(--borde-sutil);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-1);
+}
+
+.panel-acc-btn-tamano {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radio-sm);
+  background-color: var(--fondo-elevada);
+  color: var(--texto-principal);
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.panel-acc-btn-tamano:hover:not(:disabled) {
+  background-color: var(--fondo-sutil);
+}
+
+.panel-acc-btn-tamano:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.panel-acc-valor-tamano {
+  color: var(--texto-principal);
+}
+
+/* 3. Lista de switches */
+.panel-acc-lista-switches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+}
+
+.panel-acc-fila-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.panel-acc-textos-switch {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.panel-acc-etiqueta {
+  color: var(--texto-principal);
+}
+
+.panel-acc-ayuda {
+  color: var(--texto-secundario);
+}
+
+/* Botón tipo Switch (píldora) */
+.panel-acc-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: var(--radio-completo);
+  background-color: var(--fondo-sutil);
+  border: 1px solid var(--borde-fuerte);
+  padding: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.panel-acc-switch.is-activo {
+  background-color: var(--marca-primario);
+  border-color: var(--marca-primario);
+}
+
+.panel-acc-switch-circulo {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--fijo-blanco);
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.panel-acc-switch.is-activo .panel-acc-switch-circulo {
+  transform: translateX(20px);
+  background-color: var(--texto-sobre-marca);
+}
+
+/* 4. Nota informativa */
+.panel-acc-nota {
+  margin: 0;
+  color: var(--texto-terciario);
+  padding-top: var(--espacio-2);
+  border-top: 1px solid var(--borde-sutil);
+}
+
+/* 5. Pie del panel */
+.panel-acc-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-3);
+}
+
+.panel-acc-enlace {
+  color: var(--marca-primario);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.panel-acc-btn-restablecer {
+  background-color: transparent;
+  color: var(--texto-principal);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio-md);
+  padding: var(--espacio-2) var(--espacio-3);
+  cursor: pointer;
+}
+
+.panel-acc-btn-restablecer:hover {
+  background-color: var(--fondo-sutil);
+}
+/* Efectos reales de los switches de accesibilidad sobre la página */
+html[data-alto-contraste="true"] {
+  filter: contrast(1.18);
+}
+
+html[data-reducir-movimiento="true"] *,
+html[data-reducir-movimiento="true"] *::before,
+html[data-reducir-movimiento="true"] *::after {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}
+
+html[data-subrayar-enlaces="true"] a {
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+}
+
+html[data-espaciado="true"] body {
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+}
+
+/* Adaptación móvil */
+@media (max-width: 768px) {
+  .panel-acc-fondo {
+    padding-top: 64px;
+  }
+
+  .panel-acc-dialogo {
+    max-width: 100%;
+    padding: var(--espacio-4);
+  }
+}
