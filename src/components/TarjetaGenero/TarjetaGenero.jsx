@@ -16,8 +16,10 @@ const COLORES_GENERO = [
 // El componente recibe:
 // - genero: objeto con los datos del género ({ id, nombre, descripcion })
 // - indice: posición en la lista para asignarle color y patrón decorativo
+// - activa: booleano para indicar si la tarjeta está seleccionada
+// - ariaSelccionado: booleano para indicar si la tarjeta está seleccionada para accesibilidad
 // - onSeleccionar: callback para navegar al catálogo con ese género filtrado
-export default function TarjetaGenero({ genero, indice = 0, onSeleccionar }) {
+export default function TarjetaGenero({ genero, indice = 0, activa= false, ariaSelccionado, onSeleccionar }) {
   // se asigna un color rotativo usando el índice, evita que si hay mas generos que colores en un futuro este se rompa
   const fondo = COLORES_GENERO[indice % COLORES_GENERO.length];
 
@@ -25,8 +27,9 @@ export default function TarjetaGenero({ genero, indice = 0, onSeleccionar }) {
     // Enlace accesible con rol interactivo y estilos visuales basados en tokens
     <a
       href={`#catalogo?genero=${genero.id}`}
-      className="tarjeta-genero"
+      className={`tarjeta-genero${activa ? " activa" : ""}`}
       style={{ backgroundColor: fondo }}
+      aria-current={activa ? "true" : undefined}
       onClick={(e) => {
         e.preventDefault();
         if (onSeleccionar) {
