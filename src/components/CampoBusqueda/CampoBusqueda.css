@@ -1,0 +1,60 @@
+.campo-busqueda-contenedor {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  min-height: 44px;
+  background-color: var(--fondo-superficie);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio-completo);
+  padding-inline: var(--espacio-3);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.campo-busqueda-contenedor:hover {
+  border-color: var(--texto-secundario);
+}
+
+.campo-busqueda-contenedor:focus-within {
+  border-color: var(--marca-primario);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marca-primario) 25%, transparent);
+}
+
+.campo-busqueda-icono {
+  display: flex;
+  align-items: center;
+  color: var(--texto-terciario);
+  flex-shrink: 0;
+  margin-right: var(--espacio-2);
+}
+
+.campo-busqueda-input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--texto-principal);
+  font-family: var(--fuente-inter);
+  font-size: 0.9375rem;
+}
+
+.campo-busqueda-input::placeholder {
+  color: var(--texto-terciario);
+}
+
+/* Botón limpiar */
+.campo-busqueda-btn-limpiar {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin-left: var(--espacio-2);
+  color: var(--texto-secundario);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.campo-busqueda-btn-limpiar:hover {
+  color: var(--texto-principal);
+}

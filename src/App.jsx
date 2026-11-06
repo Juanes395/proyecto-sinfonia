@@ -5,6 +5,7 @@ import AvisoCookies from "./components/AvisoCookies/AvisoCookies.jsx";
 import InicioPublico from "./components/InicioPublico/InicioPublico.jsx";
 import { useTextos } from "./hooks/useTextos.js";
 import { leerCookie, guardarCookie } from "./utils/cookies.js";
+import Catalogo from "./components/Catalogo/Catalogo.jsx";
 
 
 function leerSeccion() {
@@ -86,7 +87,7 @@ export default function App() {
         }
       />
       <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto", color: "var(--texto-principal)" }}>
-        {activo === "inicio" ? (
+        {activo === "inicio" && (
           <InicioPublico
             textos={textos}
             onNavegar={(destino) => {
@@ -94,15 +95,28 @@ export default function App() {
               window.location.hash = destino;
             }}
           />
-        ) : (
+        )}
+
+        {activo.startsWith("catalogo") && (
+          <Catalogo
+            textos={textos}
+            generoInicial={
+              new URLSearchParams(window.location.hash.split("?")[1]).get("genero") || null
+            }
+            onNavegar={(destino) => {
+              setActivo(destino);
+              window.location.hash = destino;
+            }}
+          />
+        )}
+        {activo !== "inicio" && !activo.startsWith("catalogo") && (
           <div style={{ color: "var(--texto-principal)", paddingBlock: "4rem" }}>
             <h2 className="titular-h2">Vista: {activo}</h2>
             <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}>
-              En construcción :p.
+              En construcción :p
             </p>
           </div>
         )}
-
       </main>
       <Footer
         textos={textos}

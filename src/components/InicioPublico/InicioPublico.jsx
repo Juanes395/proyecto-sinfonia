@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import { obtenerGeneros, obtenerGeneroPorId } from "../../services/api.js";
 import TarjetaGenero from "../TarjetaGenero/TarjetaGenero.jsx";
 import "./InicioPublico.css";
-
-const COLORES_PORTADA = [
-    "var(--portada-3)",
-    "var(--portada-5)",
-    "var(--portada-4)",
-    "var(--portada-6)",
-    "var(--portada-2)",
-    "var(--portada-1)",
-];
+import TarjetaPista from "../TarjetaPista/TarjetaPista.jsx";
 
 // El componente recibe:
 // - textos: objeto global con todas las cadenas traducidas
@@ -217,30 +209,13 @@ export default function InicioPublico({ textos, onNavegar }) {
                 ) : (
                     <div className="inicio-destacados-grilla">
                         {/* Se recorre el arreglo real devuelto por la API */}
-                        {destacadosPistas.map((pista, index) => {
-                            // se asigna un color rotativo a la portada usando los tokens oficiales
-                            const colorFondo = COLORES_PORTADA[index % COLORES_PORTADA.length];
-
-                            return (
-                                <div key={pista.id || index} className="inicio-pista-card">
-                                    {/* Portada generada por código sin fotos */}
-                                    <div
-                                        className="inicio-pista-portada"
-                                        style={{ backgroundColor: colorFondo }}
-                                    >
-                                        <div className="inicio-pista-adorno" />
-                                    </div>
-                                    {/* Título real devuelto por la API */}
-                                    <h3 className="inicio-pista-titulo titular-h4">
-                                        {pista.titulo}
-                                    </h3>
-                                    {/* Nombre del artista real devuelto por la API */}
-                                    <p className="inicio-pista-artista cuerpo-p">
-                                        {pista.artista?.nombre ?? pista.artista ?? "Artista desconocido"}
-                                    </p>
-                                </div>
-                            );
-                        })}
+                        {destacadosPistas.map((pista, index) => (
+                            <TarjetaPista
+                                key={pista.id || index}
+                                pista={pista}
+                                indice={index}
+                            />
+                        ))}
                     </div>
                 )}
             </section>

@@ -1,0 +1,71 @@
+/* Tarjeta de canción / álbum */
+.tarjeta-pista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2);
+  min-width: 0;
+  width: 100%;
+  border-radius: var(--radio-lg);
+  padding: var(--espacio-2);
+  outline: none;
+  transition: transform 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+}
+
+.tarjeta-pista:hover {
+  background-color: var(--fondo-sutil);
+  transform: translateY(-2px);
+}
+
+.tarjeta-pista:focus-visible {
+  outline: 2px solid var(--marca-primario);
+  outline-offset: 2px;
+}
+
+/* Portada vectorial sin fotos */
+.tarjeta-pista-portada {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radio-md);
+  overflow: hidden;
+  box-shadow: var(--sombra-tarjeta);
+}
+
+/* Forma geométrica abstracta interior */
+.tarjeta-pista-adorno {
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Textos y truncado legible */
+.tarjeta-pista-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.tarjeta-pista-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tarjeta-pista-artista {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tarjeta-pista-duracion {
+  color: var(--texto-terciario);
+  font-size: 0.75rem;
+}
