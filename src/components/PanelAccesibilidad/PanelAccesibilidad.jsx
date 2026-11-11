@@ -53,10 +53,9 @@ export default function PanelAccesibilidad({
   }
 
   // Reemplaza "{valor}" por el número actual (ej. "100 %")
-  const textoPorcentaje = (t?.tamanoTexto?.valor || "{valor} %").replace(
-    "{valor}",
-    preferencias.tamanoTexto
-  );
+  const textoPorcentaje = t?.tamanoTexto?.valor
+  ? t.tamanoTexto.valor.replace("{valor}", preferencias.tamanoTexto)
+  : "";
 
   // Lista de los 4 interruptores exactamente como aparecen en el Figma
   const interruptores = [

@@ -81,44 +81,16 @@
 .inicio-btn-secundario:hover {
   background: var(--fondo-sutil);
 }
-
-/* Ilustración geométrica abstracta */
 .inicio-hero-grafico {
-  position: relative;
-  width: 280px;
-  height: 240px;
+  width: 100%;
+  max-width: 550px;
   flex-shrink: 0;
 }
 
-.inicio-figura-1 {
-  position: absolute;
-  right: 0;
-  top: 10px;
-  width: 180px;
-  height: 180px;
-  background: var(--portada-3);
-  border-radius: var(--radio-xl);
-}
-
-.inicio-figura-2 {
-  position: absolute;
-  left: 10px;
-  bottom: 0;
-  width: 100px;
-  height: 100px;
-  background: var(--portada-5);
-  border-radius: var(--radio-lg);
-}
-
-.inicio-figura-3 {
-  position: absolute;
-  right: -10px;
-  bottom: 20px;
-  width: 140px;
-  height: 52px;
-  background: var(--marca-primario);
-  border-radius: var(--radio-md);
-  box-shadow: var(--sombra-tarjeta);
+.inicio-hero-svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* 2. CIFRAS / MÉTRICAS */
@@ -247,8 +219,7 @@
   }
 
   .inicio-hero-grafico {
-    width: 380px;
-    height: 320px;
+    max-width: 480px;
   }
 
   .inicio-destacados-grilla {

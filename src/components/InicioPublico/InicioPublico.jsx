@@ -3,7 +3,7 @@ import { obtenerGeneros, obtenerGeneroPorId } from "../../services/api.js";
 import TarjetaGenero from "../TarjetaGenero/TarjetaGenero.jsx";
 import "./InicioPublico.css";
 import TarjetaPista from "../TarjetaPista/TarjetaPista.jsx";
-
+import Icono from "../Icono.jsx";
 // El componente recibe:
 // - textos: objeto global con todas las cadenas traducidas
 // - onNavegar: callback para transicionar entre vistas (#inicio, #catalogo, #crear-cuenta)
@@ -92,7 +92,7 @@ export default function InicioPublico({ textos, onNavegar }) {
     return (
         <div className="inicio-publico">
             {/* 1. SECCIÓN HERO */}
-            <section className="inicio-hero" aria-label="Introducción">
+            <section className="inicio-hero" aria-labelledby="titulo-hero">
                 <div className="inicio-hero-texto">
                     {hero?.etiquetas?.temporada && (
                         <span className="inicio-hero-badge">
@@ -102,7 +102,7 @@ export default function InicioPublico({ textos, onNavegar }) {
 
                     {/* Titular Display principal */}
                     {hero?.titulo && (
-                        <h1 className="inicio-hero-titulo titular-display">
+                        <h1 id="titulo-hero" className="inicio-hero-titulo titular-display">
                             {hero.titulo}
                         </h1>
                     )}
@@ -137,17 +137,14 @@ export default function InicioPublico({ textos, onNavegar }) {
                     </div>
                 </div>
 
-                {/* Ilustración geométrica abstracta de Figma (cero fotos) */}
+                {/* Ilustración geométrica abstracta de Figma */}
                 <div className="inicio-hero-grafico" aria-hidden="true">
-                    <div className="inicio-figura inicio-figura-1" />
-                    <div className="inicio-figura inicio-figura-2" />
-                    <div className="inicio-figura inicio-figura-3">
-                    </div>
+                    <Icono nombre="inicioCollage" />
                 </div>
             </section>
 
             {/* 2. SECCIÓN CIFRAS / MÉTRICAS */}
-            <section className="inicio-cifras" aria-label="Estadísticas de la plataforma">
+            <div className="inicio-cifras">
                 {/* Canciones */}
                 <div className="inicio-cifra-item">
                     <span className="inicio-cifra-valor dato-cifra">
@@ -161,7 +158,7 @@ export default function InicioPublico({ textos, onNavegar }) {
                 {/* Géneros (el número se calcula dinámicamente con los recibidos de la API) */}
                 <div className="inicio-cifra-item">
                     <span className="inicio-cifra-valor dato-cifra">
-                        {generos.length > 0 ? generos.length : "0"}
+                        {cifras?.generos?.valor ?? generos.length}
                     </span>
                     <span className="inicio-cifra-etiqueta cuerpo-p">
                         {cifras?.generos?.etiqueta}
@@ -177,7 +174,7 @@ export default function InicioPublico({ textos, onNavegar }) {
                         {cifras?.cortes?.etiqueta}
                     </span>
                 </div>
-            </section>
+            </div>
 
             {/* 3. SECCIÓN SUENA ESTA SEMANA */}
             <section className="inicio-seccion" aria-labelledby="titulo-suena-esta-semana">
@@ -199,12 +196,12 @@ export default function InicioPublico({ textos, onNavegar }) {
                 {/* Portadas de muestra destacadas con patrones geométricos */}
                 {/* Renderizado condicional según estado de la petición */}
                 {cargandoDestacados ? (
-                    <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}>
-                        Cargando canciones…
+                    <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }} aria-label={textos?.estados?.cargando?.aria}>
+                        {textos?.estados?.cargando?.titulo}
                     </p>
                 ) : errorDestacados ? (
-                    <p className="cuerpo-m" style={{ color: "var(--estado-error)" }}>
-                        No se pudieron cargar las canciones destacadas.
+                    <p className="cuerpo-m" style={{ color: "var(--estado-error)" }} aria-label={textos?.estados?.error?.aria}>
+                        {textos?.estados?.error?.descripcion}
                     </p>
                 ) : (
                     <div className="inicio-destacados-grilla">
@@ -240,12 +237,12 @@ export default function InicioPublico({ textos, onNavegar }) {
 
                 {/* Grilla dinámica de géneros cargada desde la API */}
                 {cargandoGeneros ? (
-                    <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}>
-                        Cargando géneros…
+                    <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}    aria-label={textos?.estados?.cargando?.aria}>
+                        {textos?.estados?.cargando?.titulo}
                     </p>
                 ) : errorGeneros ? (
-                    <p className="cuerpo-m" style={{ color: "var(--estado-error)" }}>
-                        No se pudieron cargar los géneros.
+                    <p className="cuerpo-m" style={{ color: "var(--estado-error)" }} >
+                        {textos?.estados?.error?.descripcion}
                     </p>
                 ) : (
                     <div className="inicio-generos-grilla">

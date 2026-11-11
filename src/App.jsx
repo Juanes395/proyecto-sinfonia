@@ -38,7 +38,15 @@ export default function App() {
 // Estado para mostrar u ocultar el panel de accesibilidad
   const [accAbierto, setAccAbierto] = useState(false);
   // Estado con las opciones del panel de accesibilidad
-  const [preferenciasAcc, setPreferenciasAcc] = useState(ACC_INICIAL);
+  const [preferenciasAcc, setPreferenciasAcc] = useState(() => {
+  if (leerCookie("consentimiento") === "aceptadas") {
+    try {
+      const guardada = leerCookie("accesibilidad");
+      if (guardada) return { ...ACC_INICIAL, ...JSON.parse(guardada) };
+    } catch {}
+  }
+  return ACC_INICIAL;
+});
 
   // se consume el hook conectado a la API de Sintonía
   const { textos, cargando, error, recargar } = useTextos(idioma);
@@ -100,7 +108,7 @@ useEffect(() => {
         error={error}
         recargar={recargar}
         idioma={idioma}
-        cambiarIdioma={setIdioma}
+        cambiarIdioma={manejarCambioIdioma}
         activo={activo}
         onNavegar={(destino) => {
           setActivo(destino);
@@ -158,7 +166,7 @@ useEffect(() => {
           window.location.hash = destino;
         }}
         onAbrirAccesibilidad={() =>
-          console.log("Abrir panel de accesibilidad desde Footer")
+          setAccAbierto(true)
         }
       />
       {/* Banner de cookies: solo se muestra en la primera visita cuando consentimiento es null */}

@@ -181,10 +181,10 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
             {t?.generos?.titulo}
           </h2>
           {cargandoGeneros ? (
-            <p className="catalogo-mensaje cuerpo-m">Cargando…</p>
+            <p className="catalogo-mensaje cuerpo-m" aria-label={textos?.estados?.cargando?.aria}>{textos?.estados?.cargando?.titulo}</p>
           ) : errorGeneros ? (
             <p className="catalogo-mensaje catalogo-error cuerpo-m">
-              {textos?.errores?.catalogo}
+              {textos?.estados?.error?.descripcion}
             </p>
           ) : (
             <div className="catalogo-generos-grilla">
@@ -224,7 +224,9 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
             </div>
 
             {cargandoDestacados ? (
-              <p className="catalogo-mensaje cuerpo-m">Cargando…</p>
+              <p className="catalogo-mensaje cuerpo-m" aria-label={textos?.estados?.cargando?.aria}>
+                {textos?.estados?.cargando?.titulo}
+              </p>
             ) : (
               <div className="catalogo-albumes-grilla">
                 {albumesDestacados.map((album, idx) => (
@@ -242,7 +244,9 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
         {generoId && (
           <>
             {cargandoDetalle ? (
-              <p className="catalogo-mensaje cuerpo-m">Cargando…</p>
+              <p className="catalogo-mensaje cuerpo-m" aria-label={textos?.estados?.cargando?.aria}>
+                {textos?.estados?.cargando?.titulo}
+              </p>
             ) : errorDetalle ? (
               <div className="catalogo-vacio">
                 <h2 className="titular-h3">{t?.vacio?.titulo}</h2>
@@ -260,8 +264,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
                     <div className="catalogo-artistas-lista">
                       {detalleGenero.artistas.map((artista, i) => {
                         // Usamos el color de fondo que envía la API o rotamos entre tokens
-                        const colorCirculo =
-                          i % 2 === 0 ? "var(--portada-3)" : "var(--portada-5)";
+                        const colorCirculo =artista.portada?.fondo
                         return (
                           <div key={artista.id || i} className="catalogo-artista-card">
                             <div
