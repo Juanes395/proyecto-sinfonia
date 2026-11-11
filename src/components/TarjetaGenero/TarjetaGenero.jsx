@@ -1,35 +1,24 @@
 import React from "react";
 import "./TarjetaGenero.css";
 
-// Mapeo de colores y adornos según el ID del género o índice para replicar Figma
-const COLORES_GENERO = [
-  "var(--portada-3)", // Pop (verde azulado)
-  "var(--portada-2)", // Indie (coral / naranja rojizo)
-  "var(--portada-1)", // Rock (morado / violeta)
-  "var(--portada-6)", // Electrónica (azul vibrante)
-  "var(--portada-5)", // Salsa (magenta / rosado)
-  "var(--portada-4)", // Tropical (amarillo mostaza)
-  "var(--portada-1)", // Música andina (morado lavanda)
-  "var(--portada-3)", // Folk (verde esmeralda)
-];
+
 
 // El componente recibe:
 // - genero: objeto con los datos del género ({ id, nombre, descripcion })
 // - indice: posición en la lista para asignarle color y patrón decorativo
 // - activa: booleano para indicar si la tarjeta está seleccionada
-// - ariaSelccionado: booleano para indicar si la tarjeta está seleccionada para accesibilidad
+// - ariaSeleccionado: booleano para indicar si la tarjeta está seleccionada para accesibilidad
 // - onSeleccionar: callback para navegar al catálogo con ese género filtrado
-export default function TarjetaGenero({ genero, indice = 0, activa= false, ariaSelccionado, onSeleccionar }) {
-  // se asigna un color rotativo usando el índice, evita que si hay mas generos que colores en un futuro este se rompa
-  const fondo = COLORES_GENERO[indice % COLORES_GENERO.length];
-
+export default function TarjetaGenero({ genero, activa= false, ariaSeleccionado, onSeleccionar }) {
+  const portada = genero?.portada;
   return (
     // Enlace accesible con rol interactivo y estilos visuales basados en tokens
     <a
       href={`#catalogo?genero=${genero.id}`}
-      className={`tarjeta-genero${activa ? " activa" : ""}`}
-      style={{ backgroundColor: fondo }}
+      className={`tarjeta-genero${activa ? " is-activa" : ""}`}
+      style={{ backgroundColor: portada?.fondo  }}
       aria-current={activa ? "true" : undefined}
+      aria-label={activa && ariaSeleccionado ? `${genero.nombre} (${ariaSeleccionado})` : undefined}
       onClick={(e) => {
         e.preventDefault();
         if (onSeleccionar) {
@@ -41,7 +30,11 @@ export default function TarjetaGenero({ genero, indice = 0, activa= false, ariaS
       <span className="tarjeta-genero-nombre">{genero.nombre}</span>
 
       {/* Ilustración geométrica decorativa de fondo */}
-      <span className="tarjeta-genero-adorno" aria-hidden="true" />
+      <span
+        className="tarjeta-genero-adorno"
+        style={{ backgroundColor: portada?.figura }}
+        aria-hidden="true"
+      />
     </a>
   );
 }

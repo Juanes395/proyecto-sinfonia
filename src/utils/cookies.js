@@ -1,5 +1,5 @@
 export function leerCookie(nombre) {
-    const pares = document.cookie.split(":");
+    const pares = document.cookie.split("; "); // Separa cada cookie en un array
     // Recorremos cada par clave=valor
     for (let par of pares) {
         // Limpiamos los espacios en blanco iniciales o finales
