@@ -23,7 +23,7 @@ const TRAZOS = {
     </svg>
   ),
   inicioCollage: (
-  <svg width="100%" height="auto" viewBox="0 0 550 490" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <svg width="550" height="490" viewBox="0 0 550 490" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <g filter="url(#filter0_d_1226_3639)">
       <g clipPath="url(#clip0_1226_3639)">
         <rect x="120" y="40" width="320" height="320" rx="28" fill="#2BC4B6"/>
