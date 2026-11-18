@@ -97,7 +97,7 @@ export default function InicioPublico({ textos, onNavegar }) {
 
                     {/* Titular Display principal */}
                     {hero?.titulo && (
-                        <h1 id="titulo-hero" className="inicio-hero-titulo titular-display">
+                        <h1 id="titulo-hero" className="inicio-hero-titulo titular-gigante">
                             {hero.titulo}
                         </h1>
                     )}

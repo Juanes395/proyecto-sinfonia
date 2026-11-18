@@ -127,7 +127,7 @@ useEffect(() => {
         onCambiar={cambiarPreferenciaAcc}
         onRestablecer={() => setPreferenciasAcc(ACC_INICIAL)}
       />
-      <main style={{ padding: "2rem", maxWidth: "80rem", marginInline: "auto", color: "var(--texto-principal)" }}>
+      <main className="contenedor-principal">
         {activo === "inicio" && (
           <InicioPublico
             textos={textos}
