@@ -24,3 +24,14 @@ export async function obtenerGeneroPorId(id, signal) {
   const json = await respuesta.json();
   return json?.datos ?? json?.genero ?? json;
 }
+// Función para obtener los álbumes populares (GET /albumes?orden=populares&limite=6)
+export async function obtenerAlbumesPopulares(signal) {
+  const respuesta = await fetch(`${API_BASE}/albumes?orden=populares&limite=6`, { signal });
+  if (!respuesta.ok) {
+    throw new Error(`Error al cargar álbumes populares: HTTP ${respuesta.status}`);
+  }
+  const json = await respuesta.json();
+  if (Array.isArray(json)) return json;
+  if (Array.isArray(json?.datos)) return json.datos;
+  return [];
+}
