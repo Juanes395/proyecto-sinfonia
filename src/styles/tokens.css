@@ -110,3 +110,9 @@ body {
 .detalle-nota-fuerte { font-family: var(--fuente-inter); font-weight: 600; font-size: 12px; line-height: 16px; }
 .detalle-etiqueta { font-family: var(--fuente-inter); font-weight: 600; font-size: 11px; line-height: 16px; letter-spacing: 0.080em; text-transform: uppercase; }
 .dato-cifra { font-family: var(--fuente-syne); font-weight: 700; font-size: 32px; line-height: 36px; letter-spacing: -0.010em; }
+
+.contenedor-principal {
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+  color: var(--texto-principal);
+}

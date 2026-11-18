@@ -35,8 +35,9 @@
 .inicio-hero-titulo {
   margin: 0;
   color: var(--texto-principal);
-  font-size: 2.5rem;
-  line-height: 1.1;
+  font-size: 120px; /* 120px en escritorio por defecto */
+  line-height: 108px;
+  letter-spacing: -0.03em;
 }
 
 .inicio-hero-subtitulo {
@@ -213,11 +214,6 @@
     justify-content: space-between;
     align-items: center;
   }
-
-  .inicio-hero-titulo {
-    font-size: 3.5rem;
-  }
-
   .inicio-hero-grafico {
     max-width: 480px;
   }
@@ -257,12 +253,10 @@
     align-items: flex-start;
     gap: var(--espacio-6);
   }
-
   .inicio-hero-titulo {
-    font-size: 2.25rem;
-    line-height: 1.1;
+    font-size: 40px; /* 40px en celular para que coincida con la vista móvil */
+    line-height: 46px;
   }
-
   .inicio-hero-botones {
     flex-direction: column;
     width: 100%;
