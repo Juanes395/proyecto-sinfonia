@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { obtenerGeneros, obtenerGeneroPorId } from "../../services/api.js";
+import { obtenerGeneros, obtenerGeneroPorId, obtenerAlbumesPopulares } from "../../services/api.js";
 import TarjetaGenero from "../TarjetaGenero/TarjetaGenero.jsx";
 import "./InicioPublico.css";
 import TarjetaPista from "../TarjetaPista/TarjetaPista.jsx";
@@ -28,62 +28,57 @@ export default function InicioPublico({ textos, onNavegar }) {
     const [errorDestacados, setErrorDestacados] = useState(false);
 
 
-    // Petición a GET /generos para cargar las categorías musicales
-    useEffect(() => {
-        const controlador = new AbortController();
-        let vigente = true;
+   useEffect(() => {
+    const controlador = new AbortController();
+    let vigente = true;
 
-        setCargandoGeneros(true);
-        setCargandoDestacados(true);
-        setErrorGeneros(false);
-        setErrorDestacados(false);
+    setCargandoGeneros(true);
+    setErrorGeneros(false);
 
-        // 1. Obtenemos la lista real de géneros
-        obtenerGeneros(controlador.signal)
-            .then((datos) => {
-                if (!vigente) return;
+    obtenerGeneros(controlador.signal)
+      .then((datos) => {
+        if (!vigente) return;
+        const lista = Array.isArray(datos)
+          ? datos
+          : Array.isArray(datos?.generos)
+            ? datos.generos
+            : [];
+        setGeneros(lista);
+      })
+      .catch((err) => {
+        if (vigente && err.name !== "AbortError") {
+          console.error("Error al cargar géneros:", err);
+          setErrorGeneros(true);
+        }
+      })
+      .finally(() => {
+        if (vigente) setCargandoGeneros(false);
+      });
 
-                const lista = Array.isArray(datos)
-                    ? datos
-                    : Array.isArray(datos?.generos)
-                        ? datos.generos
-                        : [];
+    setCargandoDestacados(true);
+    setErrorDestacados(false);
 
-                setGeneros(lista);
-                setCargandoGeneros(false);
+    obtenerAlbumesPopulares(controlador.signal)
+      .then((albumes) => {
+        if (vigente) {
+          setDestacadosPistas(Array.isArray(albumes) ? albumes : []);
+        }
+      })
+      .catch((err) => {
+        if (vigente && err.name !== "AbortError") {
+          console.error("Error al cargar álbumes populares:", err);
+          setErrorDestacados(true);
+        }
+      })
+      .finally(() => {
+        if (vigente) setCargandoDestacados(false);
+      });
 
-                // 2. Si hay al menos un género disponible, usamos el ID del primero
-                if (lista.length > 0) {
-                    const idPrimerGenero = lista[0].id;
-                    return obtenerGeneroPorId(idPrimerGenero, controlador.signal);
-                }
-            })
-            .then((detalle) => {
-                if (vigente && detalle) {
-                    const pistas = Array.isArray(detalle?.pistas) ? detalle.pistas : [];
-                    setDestacadosPistas(pistas.slice(0, 6));
-                    setCargandoDestacados(false);
-                }
-            })
-            .catch((err) => {
-                if (vigente && err.name !== "AbortError") {
-                    console.error("Error al cargar datos del catálogo:", err);
-                    setErrorGeneros(true);
-                    setErrorDestacados(true);
-                }
-            })
-            .finally(() => {
-                if (vigente) {
-                    setCargandoGeneros(false);
-                    setCargandoDestacados(false);
-                }
-            });
-
-        return () => {
-            vigente = false;
-            controlador.abort();
-        };
-    }, []);
+    return () => {
+      vigente = false;
+      controlador.abort();
+    };
+  }, []);
 
     function navegarA(destino) {
         if (onNavegar) onNavegar(destino);
