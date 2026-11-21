@@ -3,7 +3,7 @@ import Icono from "../Icono.jsx";
 import "./Navbar.css";
 
 
-export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo = "inicio", onNavegar, onAbrirAccesibilidad }) {
+export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo = "inicio", onNavegar, onAbrirAccesibilidad, ocultarEnMovil = false }) {
     const [menuAbierto, setMenuAbierto] = useState(false);
     const botonMenuRef = useRef(null);
 
@@ -43,7 +43,7 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
         }
     }
     return (
-        <header className="navbar">
+        <header className={`navbar${ocultarEnMovil ? " navbar--ocultar-movil" : ""}`}>
             <nav className="navbar-interior" aria-label={ariaNav}>
                 {/* LOGO */}
                 <a
