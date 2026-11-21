@@ -1,0 +1,393 @@
+.album-vista {
+  width: 100%;
+  padding-block: var(--espacio-6, 1.5rem) var(--espacio-8, 3rem);
+}
+
+.album-contenedor {
+  background-color: var(--fondo-superficie, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.06));
+  border-radius: var(--radio-lg, 1rem);
+  padding: var(--espacio-6, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-6, 2rem);
+}
+
+/* Botón volver: oculto en escritorio, visible en móvil */
+.album-btn-volver {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radio-md, 0.5rem);
+  color: var(--texto-principal);
+  cursor: pointer;
+}
+
+.album-btn-volver:focus-visible {
+  outline: 2px solid var(--marca-primario);
+  outline-offset: 2px;
+}
+
+/* 1. ENCABEZADO */
+.album-cabecera {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--espacio-6, 2rem);
+}
+
+.album-portada-principal {
+  width: 14rem;
+  height: 14rem;
+  flex-shrink: 0;
+  border-radius: var(--radio-md, 0.75rem);
+  overflow: hidden;
+  box-shadow: var(--sombra-tarjeta, 0 12px 32px rgba(0, 0, 0, 0.35));
+}
+
+.album-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3, 0.75rem);
+  min-width: 0;
+}
+
+.album-tipo-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--fondo-sutil, rgba(255, 255, 255, 0.08));
+  color: var(--texto-secundario);
+}
+
+.album-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+  line-height: 1.05;
+}
+
+.album-resumen-fila {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2, 0.5rem);
+}
+
+.album-avatar-mini {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.album-resumen {
+  margin: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem;
+}
+
+.album-artista-nombre {
+  color: var(--texto-principal);
+  font-weight: 600;
+}
+
+/* 2. TABLA DE PISTAS */
+.album-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.album-tabla-head th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texto-terciario, var(--texto-secundario));
+  padding: var(--espacio-2, 0.5rem) var(--espacio-3, 0.75rem);
+  border-bottom: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.08));
+}
+
+.album-fila-pista {
+  transition: background-color 150ms ease;
+}
+
+.album-fila-pista:hover {
+  background-color: var(--fondo-sutil, rgba(255, 255, 255, 0.05));
+}
+
+.album-fila-pista td {
+  padding: var(--espacio-3, 0.75rem);
+  color: var(--texto-secundario);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.col-numero {
+  width: 3rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.col-reproducciones {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.col-duracion {
+  width: 5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.album-tabla-head .col-reproducciones,
+.album-tabla-head .col-duracion {
+  text-align: right;
+}
+
+.album-icono-reloj {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--texto-terciario, var(--texto-secundario));
+}
+
+.pista-celda-principal {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3, 0.75rem);
+  min-width: 0;
+}
+
+.pista-portada-mini {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border-radius: var(--radio-sm, 0.375rem);
+  overflow: hidden;
+}
+
+.pista-textos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pista-titulo {
+  color: var(--texto-principal);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pista-artista {
+  color: var(--texto-secundario);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 3. PIE DE FECHA Y NOTA LEGAL */
+.album-pie-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--texto-terciario, var(--texto-secundario));
+  font-size: 0.8125rem;
+}
+
+.album-fecha,
+.album-nota-legal {
+  margin: 0;
+}
+
+/* 4. MÁS DEL ARTISTA */
+.album-mas-artista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4, 1.25rem);
+}
+
+.album-mas-encabezado {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espacio-3, 0.75rem);
+}
+
+.album-mas-encabezado h2 {
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.album-enlace-discografia {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--texto-secundario);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.album-enlace-discografia:hover {
+  color: var(--texto-principal);
+  text-decoration: underline;
+}
+
+.album-mas-grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: var(--espacio-4, 1.25rem);
+}
+
+.album-tarjeta-relacionada {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-2, 0.5rem);
+  background: transparent;
+  border: none;
+  border-radius: var(--radio-md, 0.75rem);
+  padding: var(--espacio-2, 0.5rem);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.album-tarjeta-relacionada:hover {
+  background-color: var(--fondo-sutil, rgba(255, 255, 255, 0.05));
+  transform: translateY(-2px);
+}
+
+.album-tarjeta-relacionada:focus-visible {
+  outline: 2px solid var(--marca-primario);
+  outline-offset: 2px;
+}
+
+.album-tarjeta-portada {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radio-md, 0.75rem);
+  overflow: hidden;
+}
+
+.album-tarjeta-titulo {
+  color: var(--texto-principal);
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.album-tarjeta-subtitulo {
+  color: var(--texto-secundario);
+  font-size: 0.8125rem;
+}
+
+/* ESTADOS (404 / ERROR / CARGA) */
+.album-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-4, 1rem);
+  padding-block: 3rem;
+}
+
+.album-estado-texto {
+  margin: 0;
+  color: var(--texto-secundario);
+}
+
+.album-btn-primario {
+  background-color: var(--marca-primario);
+  color: var(--texto-sobre-marca, #10130a);
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.album-esqueleto-cabecera {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  align-items: flex-end;
+}
+
+.album-esqueleto-portada {
+  width: 14rem;
+  height: 14rem;
+  border-radius: var(--radio-md, 0.75rem);
+  background: var(--fondo-sutil, rgba(255, 255, 255, 0.08));
+}
+
+.album-esqueleto-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.album-esqueleto-linea {
+  height: 1rem;
+  border-radius: 0.5rem;
+  background: var(--fondo-sutil, rgba(255, 255, 255, 0.08));
+}
+
+.album-esqueleto-linea.corta { width: 5rem; }
+.album-esqueleto-linea.grande { width: 60%; height: 2.5rem; }
+.album-esqueleto-linea.media { width: 40%; }
+
+/* RESPONSIVO MÓVIL (≤ 768 px, fiel a Figma 390 px) */
+@media (max-width: 768px) {
+  .album-contenedor {
+    background: transparent;
+    border: none;
+    padding: 0;
+    gap: var(--espacio-5, 1.5rem);
+  }
+
+  .album-btn-volver {
+    display: inline-flex;
+  }
+
+  .album-cabecera {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--espacio-4, 1.25rem);
+  }
+
+  .album-portada-principal {
+    width: 12.5rem;
+    height: 12.5rem;
+    margin-inline: auto;
+  }
+
+  .album-avatar-mini {
+    display: none;
+  }
+
+  /* En móvil se oculta la cabecera y las columnas secundarias */
+  .album-tabla-head,
+  .col-numero,
+  .col-reproducciones,
+  .col-duracion {
+    display: none;
+  }
+
+  .album-fila-pista td.col-titulo {
+    padding-inline: 0;
+  }
+
+  .album-pie-meta {
+    display: none;
+  }
+}
