@@ -233,14 +233,17 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
                   <TarjetaPista
                     key={album.id || idx}
                     pista={album}
-                    indice={idx}
+                    onSeleccionar={(item) => {
+                      const idAlbum = item?.album?.id || item?.id;
+                      if (idAlbum) onNavegar?.(`albumes/${idAlbum}`);
+                    }}
                   />
                 ))}
               </div>
             )}
           </section>
         )}
-    {/* 4. MODO B: CON GÉNERO SELECCIONADO  */}
+        {/* 4. MODO B: CON GÉNERO SELECCIONADO  */}
         {generoId && (
           <>
             {cargandoDetalle ? (
@@ -264,7 +267,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
                     <div className="catalogo-artistas-lista">
                       {detalleGenero.artistas.map((artista, i) => {
                         // Usamos el color de fondo que envía la API o rotamos entre tokens
-                        const colorCirculo =artista.portada?.fondo
+                        const colorCirculo = artista.portada?.fondo
                         return (
                           <div key={artista.id || i} className="catalogo-artista-card">
                             <div
@@ -297,7 +300,10 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
                         <TarjetaPista
                           key={album.id || idx}
                           pista={album}
-                          indice={idx}
+                          onSeleccionar={(item) => {
+                            const idAlbum = item?.album?.id || item?.id;
+                            if (idAlbum) onNavegar?.(`albumes/${idAlbum}`);
+                          }}
                         />
                       ))}
                     </div>
