@@ -32,6 +32,10 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
   const [errorClave, setErrorClave] = useState("");
   const [alertaGeneral, setAlertaGeneral] = useState(null); // { titulo, texto }
   const [enviando, setEnviando] = useState(false);
+  // Segundos restantes de bloqueo cuando la API responde 429 (Retry-After)
+  const [segundosEspera, setSegundosEspera] = useState(0);
+  // Indica si el último fallo fue de red para cambiar el botón a "Reintentar"
+  const [errorConexion, setErrorConexion] = useState(false);
 
   // Referencias para mover el foco al primer campo con error (accesibilidad)
   const correoRef = useRef(null);
@@ -46,9 +50,20 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
       document.title = textos?.sitio?.nombre || "Sintonía";
     };
   }, [t, textos]);
+  // Cuenta regresiva cada segundo cuando hay un bloqueo 429 activo
+  useEffect(() => {
+    if (segundosEspera <= 0) return;
+
+    const temporizador = setInterval(() => {
+      setSegundosEspera((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+
+    return () => clearInterval(temporizador);
+  }, [segundosEspera]);
 
   async function manejarEnvio(evento) {
     evento.preventDefault();
+    if (enviando || segundosEspera > 0) return;
 
     const correoLimpio = correo.trim();
     const errCorreo = !correoLimpio ? (eTextos?.correoObligatorio || "") : "";
@@ -73,6 +88,7 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
 
     setAlertaGeneral(null);
     setEnviando(true);
+    setErrorConexion(false);
 
     try {
       const resultado = await iniciarSesion({ correo: correoLimpio, clave });
@@ -84,25 +100,33 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
         onNavegar("inicio");
       }
     } catch (err) {
-      // Manejo base de errores 
-      if (err.status === 401) {
-        setAlertaGeneral({
-          titulo: eTextos?.credenciales?.titulo,
-          texto: eTextos?.credenciales?.texto,
-        });
-      } else if (err.status === 422 && err.campos) {
-        setErrorCorreo(err.campos.correo || "");
-        setErrorClave(err.campos.clave || "");
-        setAlertaGeneral({
-          titulo: eTextos?.camposObligatorios?.titulo,
-          texto: eTextos?.camposObligatorios?.texto,
-        });
-      } else {
-        setAlertaGeneral({
-          titulo: eTextos?.conexion?.titulo,
-          texto: eTextos?.conexion?.texto,
-        });
-      }
+     if (err.status === 401) {
+      // 401: un solo mensaje genérico, sin indicar si falló el correo o la contraseña
+      setAlertaGeneral({
+        titulo: eTextos?.credenciales?.titulo,
+        texto: eTextos?.credenciales?.texto,
+      });
+    } else if (err.status === 422 && err.campos) {
+      // 422: errores de validación por campo devueltos por el backend
+      setErrorCorreo(err.campos.correo || "");
+      setErrorClave(err.campos.clave || "");
+      setAlertaGeneral({
+        titulo: eTextos?.camposObligatorios?.titulo,
+        texto: eTextos?.camposObligatorios?.texto,
+      });
+    } else if (err.status === 429) {
+      // 429: bloqueo temporal usando la cabecera Retry-After (fallback 60 s)
+      const espera = err.retryAfter > 0 ? Math.ceil(err.retryAfter) : 60;
+      setSegundosEspera(espera);
+      setAlertaGeneral(null);
+    } else {
+      // Sin respuesta (red caída) o error inesperado: conserva lo escrito y habilita Reintentar
+      setErrorConexion(true);
+      setAlertaGeneral({
+        titulo: eTextos?.conexion?.titulo,
+        texto: eTextos?.conexion?.texto,
+      });
+    }
     } finally {
       setEnviando(false);
     }
@@ -112,7 +136,16 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
     "{anio}",
     String(new Date().getFullYear())
   );
-
+  const alertaVisible =
+    segundosEspera > 0
+      ? {
+          titulo: eTextos?.demasiadosIntentos?.titulo,
+          texto: (eTextos?.demasiadosIntentos?.texto || "").replace(
+            "{segundos}",
+            String(segundosEspera)
+          ),
+        }
+      : alertaGeneral;
   return (
     <div className="ingreso-pagina">
       {/* COLUMNA IZQUIERDA: FORMULARIO */}
@@ -152,14 +185,14 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
           </header>
 
           {/* Caja de alerta general (campos obligatorios / errores de ingreso) */}
-          {alertaGeneral && (
+          {alertaVisible && (
             <div className="ingreso-alerta" role="alert">
               <span className="ingreso-alerta-icono">
                 <Icono nombre="alerta" />
               </span>
               <div className="ingreso-alerta-textos">
-                <strong className="ingreso-alerta-titulo">{alertaGeneral.titulo}</strong>
-                <p className="ingreso-alerta-desc">{alertaGeneral.texto}</p>
+                <strong className="ingreso-alerta-titulo">{alertaVisible.titulo}</strong>
+                <p className="ingreso-alerta-desc">{alertaVisible.texto}</p>
               </div>
             </div>
           )}

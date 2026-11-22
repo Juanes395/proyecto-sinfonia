@@ -270,14 +270,9 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
         {generoId && (
           <>
             {cargandoDetalle ? (
-              <p className="catalogo-mensaje cuerpo-m" aria-label={textos?.estados?.cargando?.aria}>
-                {textos?.estados?.cargando?.titulo}
-              </p>
+              <EsqueletoSeccion tipo="lista" cantidad={5} ariaLabel={textos?.estados?.cargando?.aria} />
             ) : errorDetalle ? (
-              <div className="catalogo-vacio">
-                <h2 className="titular-h3">{t?.vacio?.titulo}</h2>
-                <p className="cuerpo-m">{t?.vacio?.texto}</p>
-              </div>
+              <EstadoError textos={textos} onReintentar={() => setIntentoDetalle((n) => n + 1)} />
             ) : detalleGenero ? (
               <>
                 {/* 4.1. SECCIÓN DE ARTISTAS (Círculos de color) */}
@@ -331,10 +326,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
                       ))}
                     </div>
                   ) : (
-                    <div className="catalogo-vacio">
-                      <h3 className="titular-h3">{t?.vacio?.titulo}</h3>
-                      <p className="cuerpo-m">{t?.vacio?.texto}</p>
-                    </div>
+                    <EstadoVacio titulo={t?.vacio?.titulo} descripcion={t?.vacio?.texto} />
                   )}
                 </section>
 
