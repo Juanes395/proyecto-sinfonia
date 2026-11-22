@@ -56,3 +56,34 @@ export async function obtenerAlbumPorId(id, signal) {
   const json = await respuesta.json();
   return json?.datos ?? json?.album ?? json;
 }
+// Función para iniciar sesión con correo y contraseña (POST /sesion)
+export async function iniciarSesion({ correo, clave }, signal) {
+  const respuesta = await fetch(`${API_BASE}/sesion`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ correo, clave }),
+    signal,
+  });
+
+  // Intentamos leer el cuerpo JSON (tanto en éxito como en errores 401/422/429)
+  let datos = null;
+  try {
+    datos = await respuesta.json();
+  } catch {
+    datos = null;
+  }
+
+  if (!respuesta.ok) {
+    const error = new Error(datos?.mensaje || `Error HTTP ${respuesta.status}`);
+    error.status = respuesta.status;
+    error.codigo = datos?.codigo || null;
+    error.campos = datos?.campos || null;
+    // Leemos la cabecera Retry-After (en segundos) para el manejo de 429
+    const retryHeader = respuesta.headers.get("Retry-After");
+    error.retryAfter = retryHeader ? Number(retryHeader) : null;
+    throw error;
+  }
+
+  // Devuelve { usuario, token } según el contrato de POST /sesion
+  return datos;
+}
