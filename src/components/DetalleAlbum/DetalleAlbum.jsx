@@ -3,6 +3,7 @@ import { obtenerAlbumPorId } from "../../services/api.js";
 import PortadaSvg from "../PortadaSvg/PortadaSvg.jsx";
 import Icono from "../Icono.jsx";
 import "./DetalleAlbum.css";
+import { EsqueletoSeccion, EstadoError, EstadoVacio } from "../EstadoUI/EstadoUI.jsx";
 
 // Reemplaza marcadores tipo "{artista}" o "{anio}" en las plantillas de la API
 function interpolar(plantilla = "", valores = {}) {
@@ -113,20 +114,37 @@ export default function DetalleAlbum({ albumId, textos, idioma = "es", onNavegar
     // 1. Estado de carga
     if (cargando) {
         return (
-            <section className="album-vista album-estado" aria-busy="true">
+            <section
+                className="album-vista album-estado"
+                role="status"
+                aria-busy="true"
+                aria-label={textos?.estados?.cargando?.aria}
+            >
                 <div className="album-esqueleto-cabecera">
-                    <div className="album-esqueleto-portada" />
+                    <div className="album-esqueleto-portada estado-shimmer" />
                     <div className="album-esqueleto-meta">
-                        <div className="album-esqueleto-linea corta" />
-                        <div className="album-esqueleto-linea grande" />
-                        <div className="album-esqueleto-linea media" />
+                        <div className="album-esqueleto-linea corta estado-shimmer" />
+                        <div className="album-esqueleto-linea grande estado-shimmer" />
+                        <div className="album-esqueleto-linea media estado-shimmer" />
                     </div>
                 </div>
+                <EsqueletoSeccion tipo="lista" cantidad={5} />
+            </section>
+        );
+    }
+    // 2. Estado de error de red o servidor (500)
+    if (errorRed) {
+        return (
+            <section className="album-vista album-estado">
+                <EstadoError
+                    textos={textos}
+                    onReintentar={() => setIntento((n) => n + 1)}
+                />
             </section>
         );
     }
 
-    // 2. Estado 404: álbum no encontrado
+    // 3. Estado 404: álbum no encontrado
     if (noEncontrado || !album) {
         return (
             <section className="album-vista album-estado" role="status">
@@ -143,25 +161,7 @@ export default function DetalleAlbum({ albumId, textos, idioma = "es", onNavegar
         );
     }
 
-    // 3. Estado de error de red o servidor (500)
-    if (errorRed) {
-        return (
-            <section className="album-vista album-estado" role="alert">
-                <h1 className="titular-h2">
-                    {textos?.componentes?.reproductor?.error?.botones?.reintentar
-                        ? t?.noEncontrado?.titulo
-                        : "Error"}
-                </h1>
-                <button
-                    type="button"
-                    className="album-btn-primario"
-                    onClick={() => setIntento((n) => n + 1)}
-                >
-                    {textos?.componentes?.reproductor?.error?.botones?.reintentar}
-                </button>
-            </section>
-        );
-    }
+
 
     // Datos calculados para el encabezado
     const anio = album.fechaPublicacion ? album.fechaPublicacion.slice(0, 4) : "";
@@ -223,60 +223,64 @@ export default function DetalleAlbum({ albumId, textos, idioma = "es", onNavegar
 
                 {/* 2. TABLA DE CANCIONES */}
                 <section className="album-pistas-seccion" aria-label={t?.tabla?.etiquetas?.titulo}>
-                    <table className="album-tabla">
-                        <thead className="album-tabla-head">
-                            <tr>
-                                <th scope="col" className="col-numero">
-                                    {t?.tabla?.etiquetas?.numero}
-                                </th>
-                                <th scope="col" className="col-titulo">
-                                    {t?.tabla?.etiquetas?.titulo}
-                                </th>
-                                <th scope="col" className="col-reproducciones">
-                                    {t?.tabla?.etiquetas?.reproducciones}
-                                </th>
-                                <th
-                                    scope="col"
-                                    className="col-duracion"
-                                    aria-label={t?.tabla?.etiquetas?.duracion}
-                                >
-                                    <span className="album-icono-reloj" title={t?.tabla?.etiquetas?.duracion}>
-                                        <Icono nombre="reloj" />
-                                    </span>
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {pistas.map((pista, indice) => (
-                                <tr key={pista.id} className="album-fila-pista">
-                                    <td className="col-numero">{pista.numero ?? indice + 1}</td>
-
-                                    <td className="col-titulo">
-                                        <div className="pista-celda-principal">
-                                            <div className="pista-portada-mini">
-                                                <PortadaSvg portada={pista.portada ?? album.portada} />
-                                            </div>
-                                            <div className="pista-textos">
-                                                <span className="pista-titulo">{pista.titulo}</span>
-                                                <span className="pista-artista">
-                                                    {pista.artista?.nombre ?? album.artista?.nombre}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td className="col-reproducciones">
-                                        {formatearNumero(pista.reproducciones, idioma)}
-                                    </td>
-
-                                    <td className="col-duracion">
-                                        {formatearDuracionPista(pista.duracionSeg)}
-                                    </td>
+                    {pistas.length === 0 ? (
+                        <EstadoVacio descripcion={textos?.estados?.vacio?.generico} />
+                    ) : (
+                        <table className="album-tabla">
+                            <thead className="album-tabla-head">
+                                <tr>
+                                    <th scope="col" className="col-numero">
+                                        {t?.tabla?.etiquetas?.numero}
+                                    </th>
+                                    <th scope="col" className="col-titulo">
+                                        {t?.tabla?.etiquetas?.titulo}
+                                    </th>
+                                    <th scope="col" className="col-reproducciones">
+                                        {t?.tabla?.etiquetas?.reproducciones}
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="col-duracion"
+                                        aria-label={t?.tabla?.etiquetas?.duracion}
+                                    >
+                                        <span className="album-icono-reloj" title={t?.tabla?.etiquetas?.duracion}>
+                                            <Icono nombre="reloj" />
+                                        </span>
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+
+                            <tbody>
+                                {pistas.map((pista, indice) => (
+                                    <tr key={pista.id} className="album-fila-pista">
+                                        <td className="col-numero">{pista.numero ?? indice + 1}</td>
+
+                                        <td className="col-titulo">
+                                            <div className="pista-celda-principal">
+                                                <div className="pista-portada-mini">
+                                                    <PortadaSvg portada={pista.portada ?? album.portada} />
+                                                </div>
+                                                <div className="pista-textos">
+                                                    <span className="pista-titulo">{pista.titulo}</span>
+                                                    <span className="pista-artista">
+                                                        {pista.artista?.nombre ?? album.artista?.nombre}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td className="col-reproducciones">
+                                            {formatearNumero(pista.reproducciones, idioma)}
+                                        </td>
+
+                                        <td className="col-duracion">
+                                            {formatearDuracionPista(pista.duracionSeg)}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
                 </section>
 
                 {/* 3. FECHA DE PUBLICACIÓN Y NOTA LEGAL */}
