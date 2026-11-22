@@ -117,11 +117,31 @@ const TRAZOS = {
       strokeLinejoin="round"
     />
   </svg>
-  )
+  ),
+  alerta: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M17.5 10C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 10C2.5 5.85786 5.85786 2.5 10 2.5C14.1421 2.5 17.5 5.85786 17.5 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 6.25V10.8333M10 13.75V13.7583" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  ojo: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M1.66669 9.99935C1.66669 9.99935 4.66669 4.16602 10 4.16602C15.3334 4.16602 18.3334 9.99935 18.3334 9.99935C18.3334 9.99935 15.3334 15.8327 10 15.8327C4.66669 15.8327 1.66669 9.99935 1.66669 9.99935Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.5 10C12.5 11.3807 11.3807 12.5 10 12.5C8.61929 12.5 7.5 11.3807 7.5 10C7.5 8.61929 8.61929 7.5 10 7.5C11.3807 7.5 12.5 8.61929 12.5 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  ojoCerrado: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M2.5 2.5L17.5 17.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.83331 4.24935C9.21996 4.19607 9.60969 4.16823 9.99998 4.16602C15.3333 4.16602 18.3333 9.99935 18.3333 9.99935C17.6185 11.264 16.7198 12.4155 15.6666 13.416" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.50002 5.5C3.16669 7 1.66669 10 1.66669 10C1.66669 10 4.66669 15.8333 10 15.8333C11.5968 15.8292 13.1587 15.3664 14.5 14.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.25 8.25C7.88893 8.73143 7.71363 9.32695 7.75629 9.92722C7.79895 10.5275 8.05671 11.0922 8.48224 11.5178C8.90776 11.9433 9.47251 12.2011 10.0728 12.2437C10.6731 12.2864 11.2686 12.1111 11.75 11.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
 };
 export default function Icono({ nombre }) {
   if (nombre === 'logo' || nombre === "inicioCollage" || nombre === "reloj" ||
-    nombre === "volver" ) {
+    nombre === "volver" || nombre === "alerta" || nombre === "ojo" || nombre === "ojoCerrado") {
     return TRAZOS[nombre];
   }
   return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{TRAZOS[nombre]}</svg>;
