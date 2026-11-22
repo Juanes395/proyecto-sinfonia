@@ -138,10 +138,29 @@ const TRAZOS = {
       <path d="M8.25 8.25C7.88893 8.73143 7.71363 9.32695 7.75629 9.92722C7.79895 10.5275 8.05671 11.0922 8.48224 11.5178C8.90776 11.9433 9.47251 12.2011 10.0728 12.2437C10.6731 12.2864 11.2686 12.1111 11.75 11.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
+  cargando: (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M15.75 8.99979C15.7427 10.4244 15.2847 11.8101 14.4419 12.9586C13.599 14.1071 12.4143 14.9594 11.0575 15.3937C9.70071 15.8279 8.24131 15.8217 6.88823 15.376C5.53516 14.9302 4.35779 14.0679 3.52468 12.9123C2.69157 11.7567 2.24544 10.3671 2.25016 8.9425C2.25487 7.51791 2.71019 6.13134 3.55093 4.98128C4.39167 3.83122 5.57472 2.97664 6.93071 2.53989C8.28671 2.10314 9.74612 2.1066 11.1 2.54979"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
 };
 export default function Icono({ nombre }) {
   if (nombre === 'logo' || nombre === "inicioCollage" || nombre === "reloj" ||
-    nombre === "volver" || nombre === "alerta" || nombre === "ojo" || nombre === "ojoCerrado") {
+    nombre === "volver" || nombre === "alerta" || nombre === "ojo" || nombre === "ojoCerrado" || nombre === "cargando") {
     return TRAZOS[nombre];
   }
   return <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{TRAZOS[nombre]}</svg>;
