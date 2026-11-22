@@ -8,6 +8,7 @@ import { leerCookie, guardarCookie } from "./utils/cookies.js";
 import Catalogo from "./components/Catalogo/Catalogo.jsx";
 import PanelAccesibilidad from "./components/PanelAccesibilidad/PanelAccesibilidad.jsx";
 import DetalleAlbum from "./components/DetalleAlbum/DetalleAlbum.jsx";
+import IniciarSesion from "./components/IniciarSesion/IniciarSesion.jsx";
 
 function leerSeccion() {
   return window.location.hash.slice(1) || "inicio";
@@ -35,18 +36,18 @@ export default function App() {
     return "es";
   });
   const [activo, setActivo] = useState(leerSeccion);
-// Estado para mostrar u ocultar el panel de accesibilidad
+  // Estado para mostrar u ocultar el panel de accesibilidad
   const [accAbierto, setAccAbierto] = useState(false);
   // Estado con las opciones del panel de accesibilidad
   const [preferenciasAcc, setPreferenciasAcc] = useState(() => {
-  if (leerCookie("consentimiento") === "aceptadas") {
-    try {
-      const guardada = leerCookie("accesibilidad");
-      if (guardada) return { ...ACC_INICIAL, ...JSON.parse(guardada) };
-    } catch {}
-  }
-  return ACC_INICIAL;
-});
+    if (leerCookie("consentimiento") === "aceptadas") {
+      try {
+        const guardada = leerCookie("accesibilidad");
+        if (guardada) return { ...ACC_INICIAL, ...JSON.parse(guardada) };
+      } catch { }
+    }
+    return ACC_INICIAL;
+  });
 
   // se consume el hook conectado a la API de Sintonía
   const { textos, cargando, error, recargar } = useTextos(idioma);
@@ -65,23 +66,23 @@ export default function App() {
     document.documentElement.lang = idioma;
   }, [idioma]);
 
- // Aplica el porcentaje de tamaño de texto elegido en el panel (90%, 100%, 110%, 120%)
+  // Aplica el porcentaje de tamaño de texto elegido en el panel (90%, 100%, 110%, 120%)
   useEffect(() => {
     document.documentElement.style.fontSize =
       preferenciasAcc.tamanoTexto === 100 ? "" : `${preferenciasAcc.tamanoTexto}%`;
   }, [preferenciasAcc.tamanoTexto]);
   // Aplica los 4 switches en el <html> para que tengan efecto real en la interfaz
-useEffect(() => {
-  const raiz = document.documentElement;
-  raiz.dataset.altoContraste = preferenciasAcc.altoContraste;
-  raiz.dataset.reducirMovimiento = preferenciasAcc.reducirMovimiento;
-  raiz.dataset.subrayarEnlaces = preferenciasAcc.subrayarEnlaces;
-  raiz.dataset.espaciado = preferenciasAcc.espaciado;
+  useEffect(() => {
+    const raiz = document.documentElement;
+    raiz.dataset.altoContraste = preferenciasAcc.altoContraste;
+    raiz.dataset.reducirMovimiento = preferenciasAcc.reducirMovimiento;
+    raiz.dataset.subrayarEnlaces = preferenciasAcc.subrayarEnlaces;
+    raiz.dataset.espaciado = preferenciasAcc.espaciado;
 
-  if (consentimiento === "aceptadas") {
-    guardarCookie("accesibilidad", JSON.stringify(preferenciasAcc));
-  }
-}, [preferenciasAcc, consentimiento]);
+    if (consentimiento === "aceptadas") {
+      guardarCookie("accesibilidad", JSON.stringify(preferenciasAcc));
+    }
+  }, [preferenciasAcc, consentimiento]);
   // Manejador centralizado para cambiar de idioma
   function manejarCambioIdioma(nuevoIdioma) {
     setIdioma(nuevoIdioma);
@@ -100,25 +101,28 @@ useEffect(() => {
   function cambiarPreferenciaAcc(clave, valor) {
     setPreferenciasAcc((prev) => ({ ...prev, [clave]: valor }));
   }
+  const esVistaAuth = activo === "ingresar";
   return (
     <>
-      <Navbar
-        textos={textos}
-        cargando={cargando}
-        error={error}
-        recargar={recargar}
-        idioma={idioma}
-        cambiarIdioma={manejarCambioIdioma}
-        activo={activo}
-        onNavegar={(destino) => {
-          setActivo(destino);
-          window.location.hash = destino;
-        }}
-        onAbrirAccesibilidad={() =>
-          setAccAbierto((prev) => !prev)
-        }
-        ocultarEnMovil={activo.startsWith("albumes/")}
-      />
+      {!esVistaAuth && (
+        <Navbar
+          textos={textos}
+          cargando={cargando}
+          error={error}
+          recargar={recargar}
+          idioma={idioma}
+          cambiarIdioma={manejarCambioIdioma}
+          activo={activo}
+          onNavegar={(destino) => {
+            setActivo(destino);
+            window.location.hash = destino;
+          }}
+          onAbrirAccesibilidad={() =>
+            setAccAbierto((prev) => !prev)
+          }
+          ocultarEnMovil={activo.startsWith("albumes/")}
+        />
+      )}
       {/* Panel flotante de accesibilidad */}
       <PanelAccesibilidad
         textos={textos}
@@ -162,7 +166,16 @@ useEffect(() => {
             }}
           />
         )}
-        {activo !== "inicio" && !activo.startsWith("catalogo") &&  !activo.startsWith("albumes/") && (
+        {activo === "ingresar" && (
+          <IniciarSesion
+            textos={textos}
+            onNavegar={(destino) => {
+              setActivo(destino);
+              window.location.hash = destino;
+            }}
+          />
+        )}
+        {activo !== "inicio" && !activo.startsWith("catalogo") && !activo.startsWith("albumes/") && (
           <div style={{ color: "var(--texto-principal)", paddingBlock: "4rem" }}>
             <h2 className="titular-h2">Vista: {activo}</h2>
             <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}>
@@ -171,6 +184,7 @@ useEffect(() => {
           </div>
         )}
       </main>
+      {!esVistaAuth && (
       <Footer
         textos={textos}
         onNavegar={(destino) => {
@@ -181,6 +195,7 @@ useEffect(() => {
           setAccAbierto(true)
         }
       />
+      )}
       {/* Banner de cookies: solo se muestra en la primera visita cuando consentimiento es null */}
       {!consentimiento && (
         <AvisoCookies
