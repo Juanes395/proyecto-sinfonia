@@ -7,7 +7,7 @@ import { useTextos } from "./hooks/useTextos.js";
 import { leerCookie, guardarCookie } from "./utils/cookies.js";
 import Catalogo from "./components/Catalogo/Catalogo.jsx";
 import PanelAccesibilidad from "./components/PanelAccesibilidad/PanelAccesibilidad.jsx";
-
+import DetalleAlbum from "./components/DetalleAlbum/DetalleAlbum.jsx";
 
 function leerSeccion() {
   return window.location.hash.slice(1) || "inicio";
@@ -117,6 +117,7 @@ useEffect(() => {
         onAbrirAccesibilidad={() =>
           setAccAbierto((prev) => !prev)
         }
+        ocultarEnMovil={activo.startsWith("albumes/")}
       />
       {/* Panel flotante de accesibilidad */}
       <PanelAccesibilidad
@@ -150,7 +151,18 @@ useEffect(() => {
             }}
           />
         )}
-        {activo !== "inicio" && !activo.startsWith("catalogo") && (
+        {activo.startsWith("albumes/") && (
+          <DetalleAlbum
+            albumId={activo.split("/")[1]}
+            textos={textos}
+            idioma={idioma}
+            onNavegar={(destino) => {
+              setActivo(destino);
+              window.location.hash = destino;
+            }}
+          />
+        )}
+        {activo !== "inicio" && !activo.startsWith("catalogo") &&  !activo.startsWith("albumes/") && (
           <div style={{ color: "var(--texto-principal)", paddingBlock: "4rem" }}>
             <h2 className="titular-h2">Vista: {activo}</h2>
             <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}>
