@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { obtenerGeneros, obtenerGeneroPorId } from "../../services/api.js";
 import TarjetaGenero from "../TarjetaGenero/TarjetaGenero.jsx";
 import TarjetaPista from "../TarjetaPista/TarjetaPista.jsx";
 import "./Catalogo.css";
+import { EsqueletoSeccion, EstadoVacio, EstadoError } from "../EstadoUI/EstadoUI.jsx";
 
 // Función auxiliar para convertir segundos (ej. 80) a formato mm:ss (ej. "1:20")
 function formatearDuracion(segundos) {
@@ -37,7 +38,11 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
   const [detalleGenero, setDetalleGenero] = useState(null);
   const [cargandoDetalle, setCargandoDetalle] = useState(false);
   const [errorDetalle, setErrorDetalle] = useState(false);
-
+  // Estados para manejar reintentos de carga en caso de error, relacionados con el archivo estadoUI.jsx
+  const [errorDestacados, setErrorDestacados] = useState(false);
+  const [intentoGeneros, setIntentoGeneros] = useState(0);
+  const [intentoDestacados, setIntentoDestacados] = useState(0);
+  const [intentoDetalle, setIntentoDetalle] = useState(0);
 
   // 1. Cargar la lista de los 12 géneros al montar el componente
   useEffect(() => {
@@ -67,7 +72,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
       vigente = false;
       controlador.abort();
     };
-  }, []);
+  }, [intentoGeneros]);
   // 2. Si NO hay género seleccionado, cargamos los "Álbumes destacados" 
   useEffect(() => {
     if (generoId || generos.length === 0) return;
@@ -76,6 +81,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
     let vigente = true;
 
     setCargandoDestacados(true);
+    setErrorDestacados(false);
 
     // Consultamos los primeros géneros para reunir 6 álbumes variados de muestra
     const primerosGeneros = generos.slice(0, 6);
@@ -94,6 +100,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
       .catch((err) => {
         if (vigente && err.name !== "AbortError") {
           console.error("Error al cargar álbumes destacados:", err);
+          setErrorDestacados(true);
         }
       })
       .finally(() => {
@@ -104,7 +111,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
       vigente = false;
       controlador.abort();
     };
-  }, [generoId, generos]);
+  }, [generoId, generos, intentoDestacados]);
   // 3. Si HAY un género seleccionado (Modo B), pedimos su detalle a GET /generos/:id
   useEffect(() => {
     if (!generoId) {
@@ -138,7 +145,7 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
       vigente = false;
       controlador.abort();
     };
-  }, [generoId]);
+  }, [generoId, intentoDetalle]);
   // Manejador al hacer clic en una tarjeta de género
   function seleccionarGenero(id) {
     // Si hace clic en el género que ya está activo, vuelve a la vista general del catálogo
@@ -181,11 +188,18 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
             {t?.generos?.titulo}
           </h2>
           {cargandoGeneros ? (
-            <p className="catalogo-mensaje cuerpo-m" aria-label={textos?.estados?.cargando?.aria}>{textos?.estados?.cargando?.titulo}</p>
+            <EsqueletoSeccion
+              tipo="generos"
+              cantidad={8}
+              ariaLabel={textos?.estados?.cargando?.aria}
+            />
           ) : errorGeneros ? (
-            <p className="catalogo-mensaje catalogo-error cuerpo-m">
-              {textos?.estados?.error?.descripcion}
-            </p>
+            <EstadoError
+              textos={textos}
+              onReintentar={() => setIntentoGeneros((n) => n + 1)}
+            />
+          ) : generos.length === 0 ? (
+            <EstadoVacio descripcion={textos?.estados?.vacio?.generico} />
           ) : (
             <div className="catalogo-generos-grilla">
               {generos.map((g, i) => (
@@ -224,9 +238,18 @@ export default function Catalogo({ textos, generoInicial, onNavegar }) {
             </div>
 
             {cargandoDestacados ? (
-              <p className="catalogo-mensaje cuerpo-m" aria-label={textos?.estados?.cargando?.aria}>
-                {textos?.estados?.cargando?.titulo}
-              </p>
+              <EsqueletoSeccion
+                tipo="destacados"
+                cantidad={8}
+                ariaLabel={textos?.estados?.cargando?.aria}
+              />
+            ) : errorDestacados ? (
+              <EstadoError
+                textos={textos}
+                onReintentar={() => setIntentoDestacados((n) => n + 1)}
+              />
+            ) : generos.length === 0 ? (
+              <EstadoVacio descripcion={textos?.estados?.vacio?.generico} />
             ) : (
               <div className="catalogo-albumes-grilla">
                 {albumesDestacados.map((album, idx) => (
