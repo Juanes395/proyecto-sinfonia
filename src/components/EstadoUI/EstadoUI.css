@@ -1,0 +1,132 @@
+/* Animación suave de carga tipo esqueleto */
+@keyframes estado-pulso {
+  0%, 100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.estado-shimmer {
+  background-color: var(--fondo-elevada, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radio-md, 0.75rem);
+  animation: estado-pulso 1.5s ease-in-out infinite;
+}
+/* Variantes de grilla de esqueletos */
+.estado-esqueleto--generos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espacio-4, 1rem);
+}
+
+.estado-shimmer-genero {
+  height: 5.5rem;
+}
+
+.estado-esqueleto--albumes {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--espacio-4, 1rem);
+}
+
+.estado-esqueleto-item--albumes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-2, 0.5rem);
+}
+
+.estado-shimmer-portada {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.estado-shimmer-linea {
+  height: 0.875rem;
+  width: 85%;
+  border-radius: 0.375rem;
+}
+
+.estado-shimmer-linea.corta {
+  width: 55%;
+}
+
+.estado-esqueleto--lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3, 0.75rem);
+}
+
+.estado-shimmer-fila {
+  height: 3.25rem;
+  width: 100%;
+}
+
+/* Cajas de estado vacío y error */
+.estado-caja {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espacio-3, 0.75rem);
+  padding: var(--espacio-5, 1.5rem);
+  border-radius: var(--radio-lg, 1rem);
+  border: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.08));
+  background-color: var(--fondo-elevada, rgba(255, 255, 255, 0.03));
+}
+
+.estado-caja--error {
+  border-color: var(--estado-error, #ff5f5f);
+  background-color: rgba(255, 95, 95, 0.08);
+}
+
+.estado-caja-titulo {
+  margin: 0;
+  color: var(--texto-principal);
+}
+
+.estado-caja-texto {
+  margin: 0;
+  color: var(--texto-secundario);
+}
+
+.estado-btn-reintentar {
+  background-color: var(--marca-primario);
+  color: var(--texto-sobre-marca, #10130a);
+  border: none;
+  border-radius: 999px;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.estado-btn-reintentar:focus-visible {
+  outline: 2px solid var(--marca-primario);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1024px) {
+  .estado-esqueleto--generos,
+  .estado-esqueleto--albumes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .estado-esqueleto--generos,
+  .estado-esqueleto--albumes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-3, 0.75rem);
+  }
+}
+/* Respeta tanto el switch del panel de accesibilidad como la preferencia del sistema */
+[data-reducir-movimiento="true"] .estado-shimmer {
+  animation: none;
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .estado-shimmer {
+    animation: none;
+    opacity: 0.65;
+  }
+}
