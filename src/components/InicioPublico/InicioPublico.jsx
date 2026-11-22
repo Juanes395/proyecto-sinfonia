@@ -28,57 +28,57 @@ export default function InicioPublico({ textos, onNavegar }) {
     const [errorDestacados, setErrorDestacados] = useState(false);
 
 
-   useEffect(() => {
-    const controlador = new AbortController();
-    let vigente = true;
+    useEffect(() => {
+        const controlador = new AbortController();
+        let vigente = true;
 
-    setCargandoGeneros(true);
-    setErrorGeneros(false);
+        setCargandoGeneros(true);
+        setErrorGeneros(false);
 
-    obtenerGeneros(controlador.signal)
-      .then((datos) => {
-        if (!vigente) return;
-        const lista = Array.isArray(datos)
-          ? datos
-          : Array.isArray(datos?.generos)
-            ? datos.generos
-            : [];
-        setGeneros(lista);
-      })
-      .catch((err) => {
-        if (vigente && err.name !== "AbortError") {
-          console.error("Error al cargar géneros:", err);
-          setErrorGeneros(true);
-        }
-      })
-      .finally(() => {
-        if (vigente) setCargandoGeneros(false);
-      });
+        obtenerGeneros(controlador.signal)
+            .then((datos) => {
+                if (!vigente) return;
+                const lista = Array.isArray(datos)
+                    ? datos
+                    : Array.isArray(datos?.generos)
+                        ? datos.generos
+                        : [];
+                setGeneros(lista);
+            })
+            .catch((err) => {
+                if (vigente && err.name !== "AbortError") {
+                    console.error("Error al cargar géneros:", err);
+                    setErrorGeneros(true);
+                }
+            })
+            .finally(() => {
+                if (vigente) setCargandoGeneros(false);
+            });
 
-    setCargandoDestacados(true);
-    setErrorDestacados(false);
+        setCargandoDestacados(true);
+        setErrorDestacados(false);
 
-    obtenerAlbumesPopulares(controlador.signal)
-      .then((albumes) => {
-        if (vigente) {
-          setDestacadosPistas(Array.isArray(albumes) ? albumes : []);
-        }
-      })
-      .catch((err) => {
-        if (vigente && err.name !== "AbortError") {
-          console.error("Error al cargar álbumes populares:", err);
-          setErrorDestacados(true);
-        }
-      })
-      .finally(() => {
-        if (vigente) setCargandoDestacados(false);
-      });
+        obtenerAlbumesPopulares(controlador.signal)
+            .then((albumes) => {
+                if (vigente) {
+                    setDestacadosPistas(Array.isArray(albumes) ? albumes : []);
+                }
+            })
+            .catch((err) => {
+                if (vigente && err.name !== "AbortError") {
+                    console.error("Error al cargar álbumes populares:", err);
+                    setErrorDestacados(true);
+                }
+            })
+            .finally(() => {
+                if (vigente) setCargandoDestacados(false);
+            });
 
-    return () => {
-      vigente = false;
-      controlador.abort();
-    };
-  }, []);
+        return () => {
+            vigente = false;
+            controlador.abort();
+        };
+    }, []);
 
     function navegarA(destino) {
         if (onNavegar) onNavegar(destino);
@@ -205,7 +205,10 @@ export default function InicioPublico({ textos, onNavegar }) {
                             <TarjetaPista
                                 key={pista.id || index}
                                 pista={pista}
-                                indice={index}
+                                onSeleccionar={(item) => {
+                                    const idAlbum = item?.album?.id || item?.id;
+                                    if (idAlbum) onNavegar?.(`albumes/${idAlbum}`);
+                                }}
                             />
                         ))}
                     </div>
@@ -232,7 +235,7 @@ export default function InicioPublico({ textos, onNavegar }) {
 
                 {/* Grilla dinámica de géneros cargada desde la API */}
                 {cargandoGeneros ? (
-                    <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }}    aria-label={textos?.estados?.cargando?.aria}>
+                    <p className="cuerpo-m" style={{ color: "var(--texto-secundario)" }} aria-label={textos?.estados?.cargando?.aria}>
                         {textos?.estados?.cargando?.titulo}
                     </p>
                 ) : errorGeneros ? (

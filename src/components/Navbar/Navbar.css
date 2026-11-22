@@ -305,3 +305,9 @@
     border: 0;
   }
 }
+/* Oculta la barra superior en móvil en vistas que tienen su propio botón volver (ej. Detalle de álbum) */
+@media (max-width: 768px) {
+  .navbar--ocultar-movil {
+    display: none;
+  }
+}

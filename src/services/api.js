@@ -35,3 +35,24 @@ export async function obtenerAlbumesPopulares(signal) {
   if (Array.isArray(json?.datos)) return json.datos;
   return [];
 }
+
+// Función para obtener el detalle completo de un álbum (GET /albumes/:id)
+export async function obtenerAlbumPorId(id, signal) {
+  const respuesta = await fetch(`${API_BASE}/albumes/${id}`, { signal });
+
+  if (respuesta.status === 404) {
+    const error = new Error("Álbum no encontrado");
+    error.status = 404;
+    error.codigo = "no_encontrado";
+    throw error;
+  }
+
+  if (!respuesta.ok) {
+    const error = new Error(`Error al cargar álbum ${id}: HTTP ${respuesta.status}`);
+    error.status = respuesta.status;
+    throw error;
+  }
+
+  const json = await respuesta.json();
+  return json?.datos ?? json?.album ?? json;
+}

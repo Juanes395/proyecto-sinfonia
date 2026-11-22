@@ -110,7 +110,7 @@
 /* 4. FILA DE ÁLBUMES DEL GÉNERO SELECCIONADO */
 .catalogo-albumes-genero-fila {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: var(--espacio-4);
 }
