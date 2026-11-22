@@ -207,6 +207,10 @@
   font-weight: 700;
   cursor: pointer;
   transition: opacity 150ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .ingreso-btn-submit:disabled {
@@ -346,5 +350,27 @@
   .ingreso-opciones {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+@keyframes ingreso-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ingreso-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: ingreso-girar 0.8s linear infinite;
+}
+
+[data-reducir-movimiento="true"] .ingreso-spinner {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ingreso-spinner {
+    animation: none;
   }
 }
