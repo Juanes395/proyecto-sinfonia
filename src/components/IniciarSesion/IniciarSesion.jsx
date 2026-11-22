@@ -296,9 +296,21 @@ export default function IniciarSesion({ textos, onNavegar, onSesionIniciada }) {
             <button
               type="submit"
               className="ingreso-btn-submit"
-              disabled={enviando}
+              disabled={enviando || segundosEspera > 0}
+              aria-busy={enviando}
             >
-              {enviando ? f?.mensajes?.ingresando : f?.botones?.ingresar}
+              {enviando ? (
+                <>
+                  <span className="ingreso-spinner">
+                    <Icono nombre="cargando" />
+                  </span>
+                  <span>{f?.mensajes?.ingresando}</span>
+                </>
+              ) : errorConexion ? (
+                eTextos?.conexion?.botones?.reintentar
+              ) : (
+                f?.botones?.ingresar
+              )}
             </button>
 
             {/* Enlace a crear cuenta */}
