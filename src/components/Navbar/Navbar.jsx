@@ -3,9 +3,11 @@ import Icono from "../Icono.jsx";
 import "./Navbar.css";
 
 
-export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo = "inicio", onNavegar, onAbrirAccesibilidad, ocultarEnMovil = false }) {
+export default function Navbar({ textos, cargando, error, recargar, idioma, cambiarIdioma, activo = "inicio", onNavegar, onAbrirAccesibilidad, ocultarEnMovil = false, usuario = null, onCerrarSesion }) {
     const [menuAbierto, setMenuAbierto] = useState(false);
     const botonMenuRef = useRef(null);
+    const [cuentaAbierta, setCuentaAbierta] = useState(false);
+    const menuCuentaRef = useRef(null);
 
     const nav = textos?.navbar;
     const menuMovil = textos?.menuMovil;
@@ -24,7 +26,18 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
     // Etiquetas para la vista de menú en celular
     const etiquetaIdioma = menuMovil?.secciones?.idioma;
     const etiquetaAccesibilidad = menuMovil?.secciones?.accesibilidad;
-
+    // Textos de sesión iniciada desde GET /textos
+    const ariaMenuCuenta = nav?.usuario?.menu;
+    const txtCerrarSesion = nav?.usuario?.cerrarSesion;
+    const txtCuentaMovil = menuMovil?.secciones?.cuenta;
+    const txtCerrarSesionMovil = menuMovil?.botones?.conSesion?.cerrarSesion || txtCerrarSesion;
+    // Calcula las iniciales a partir del nombre del usuario
+    const iniciales = (usuario?.nombre || "")
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((parte) => parte[0]?.toUpperCase() || "")
+        .join("");
     useEffect(() => {
         function cerrarConEscape(evento) {
             if (evento.key === "Escape" && menuAbierto) {
@@ -39,8 +52,45 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
     function navegarA(destino) {
         setMenuAbierto(false);
         if (onNavegar) {
+            setCuentaAbierta(false)
             onNavegar(destino);
         }
+    }
+    useEffect(() => {
+        function cerrarConEscape(evento) {
+            if (evento.key === "Escape") {
+                if (menuAbierto) {
+                    setMenuAbierto(false);
+                    botonMenuRef.current?.focus();
+                }
+                if (cuentaAbierta) {
+                    setCuentaAbierta(false);
+                }
+            }
+        }
+
+        function cerrarAlClicFuera(evento) {
+            if (
+                cuentaAbierta &&
+                menuCuentaRef.current &&
+                !menuCuentaRef.current.contains(evento.target)
+            ) {
+                setCuentaAbierta(false);
+            }
+        }
+
+        document.addEventListener("keydown", cerrarConEscape);
+        document.addEventListener("mousedown", cerrarAlClicFuera);
+        return () => {
+            document.removeEventListener("keydown", cerrarConEscape);
+            document.removeEventListener("mousedown", cerrarAlClicFuera);
+        };
+    }, [menuAbierto, cuentaAbierta]);
+
+    function manejarCerrarSesion() {
+        setCuentaAbierta(false);
+        setMenuAbierto(false);
+        if (onCerrarSesion) onCerrarSesion();
     }
     return (
         <header className={`navbar${ocultarEnMovil ? " navbar--ocultar-movil" : ""}`}>
@@ -57,7 +107,7 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
 
                 {/* ACCIONES MÓVIL  */}
                 <div className="navbar-movil-acciones">
-                    {txtIngresar && (
+                    {!usuario && txtIngresar && (
                         <a
                             className="navbar-enlace-login-movil"
                             href="#ingresar"
@@ -183,26 +233,97 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                             </div>
                         </div>
                         {/* BOTONES DE INVITADO: Ingresar y Crear cuenta */}
-                        <div className="navbar-botones-sesion">
-                            {txtCrearCuenta && (
-                                <a
-                                    href="#crear-cuenta"
-                                    className="navbar-accion navbar-accion-primaria"
-                                    onClick={() => navegarA("crear-cuenta")}
-                                >
-                                    {txtCrearCuenta}
-                                </a>
-                            )}
-                            {txtIngresar && (
-                                <a
-                                    href="#ingresar"
-                                    className="navbar-accion navbar-accion-secundaria"
-                                    onClick={() => navegarA("ingresar")}
-                                >
-                                    {txtIngresar}
-                                </a>
-                            )}
-                        </div>
+                        {!usuario ? (
+                            <div className="navbar-botones-sesion">
+                                {txtCrearCuenta && (
+                                    <a
+                                        href="#crear-cuenta"
+                                        className="navbar-accion navbar-accion-primaria"
+                                        onClick={() => navegarA("crear-cuenta")}
+                                    >
+                                        {txtCrearCuenta}
+                                    </a>
+                                )}
+                                {txtIngresar && (
+                                    <a
+                                        href="#ingresar"
+                                        className="navbar-accion navbar-accion-secundaria"
+                                        onClick={() => navegarA("ingresar")}
+                                    >
+                                        {txtIngresar}
+                                    </a>
+                                )}
+                            </div>
+                        ) : (
+                            <>
+                                {/* Menú desplegable de cuenta en escritorio */}
+                                <div className="navbar-cuenta-web" ref={menuCuentaRef}>
+                                    <button
+                                        type="button"
+                                        className="navbar-avatar-btn"
+                                        aria-label={ariaMenuCuenta}
+                                        aria-expanded={cuentaAbierta}
+                                        aria-haspopup="menu"
+                                        onClick={() => setCuentaAbierta((v) => !v)}
+                                    >
+                                        {iniciales}
+                                    </button>
+
+                                    {cuentaAbierta && (
+                                        <div className="navbar-cuenta-menu" role="menu">
+                                            <div className="navbar-cuenta-cabecera">
+                                                <span className="navbar-avatar-mini" aria-hidden="true">
+                                                    {iniciales}
+                                                </span>
+                                                <div className="navbar-cuenta-datos">
+                                                    <strong className="navbar-cuenta-nombre">{usuario.nombre}</strong>
+                                                    <span className="navbar-cuenta-correo">{usuario.correo}</span>
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                type="button"
+                                                role="menuitem"
+                                                className="navbar-cuenta-salir"
+                                                onClick={manejarCerrarSesion}
+                                            >
+                                                <Icono nombre="cerrarSesion" />
+                                                <span>{txtCerrarSesion}</span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Tarjeta de cuenta al fondo del menú móvil */}
+                                <div className="navbar-cuenta-movil">
+                                    <div className="navbar-cuenta-movil-info">
+                                        <span
+                                            className="navbar-avatar-movil"
+                                            style={usuario.colorHex ? { backgroundColor: usuario.colorHex } : undefined}
+                                            aria-hidden="true"
+                                        >
+                                            {iniciales}
+                                        </span>
+                                        <div className="navbar-cuenta-datos">
+                                            <strong className="navbar-cuenta-nombre">
+                                                {usuario.nombre?.split(" ")[0] || usuario.nombre}
+                                            </strong>
+                                            {txtCuentaMovil && (
+                                                <span className="navbar-cuenta-estado">{txtCuentaMovil}</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="navbar-cuenta-salir-movil"
+                                        onClick={manejarCerrarSesion}
+                                    >
+                                        {txtCerrarSesionMovil}
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </nav>
