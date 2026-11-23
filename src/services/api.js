@@ -61,6 +61,7 @@ export async function iniciarSesion({ correo, clave }, signal) {
   const respuesta = await fetch(`${API_BASE}/sesion`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ correo, clave }),
     signal,
   });
@@ -86,4 +87,47 @@ export async function iniciarSesion({ correo, clave }, signal) {
 
   // Devuelve { usuario, token } según el contrato de POST /sesion
   return datos;
+}
+// Obtiene la cuenta de la sesión actual (GET /sesion)
+export async function obtenerSesionActual(token, signal) {
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  const respuesta = await fetch(`${API_BASE}/sesion`, {
+    method: "GET",
+    headers,
+    credentials: "include",
+    signal,
+  });
+  // 401 significa que no hay sesión activa o el token venció
+  if (respuesta.status === 401) {
+    const error = new Error("No autenticado");
+    error.status = 401;
+    throw error;
+  }
+  if (!respuesta.ok) {
+    const error = new Error(`Error al verificar sesión: HTTP ${respuesta.status}`);
+    error.status = respuesta.status;
+    throw error;
+  }
+  // La API devuelve directamente el objeto de usuario sin envolver
+  return respuesta.json();
+}
+
+// Cierra la sesión en el servidor y borra su cookie (DELETE /sesion)
+export async function cerrarSesionApi(token) {
+  const headers = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  const respuesta = await fetch(`${API_BASE}/sesion`, {
+    method: "DELETE",
+    headers,
+    credentials: "include",
+  });
+  // 204 indica cierre exitoso (no trae cuerpo JSON)
+  if (!respuesta.ok && respuesta.status !== 204) {
+    throw new Error(`Error al cerrar sesión: HTTP ${respuesta.status}`);
+  }
 }
