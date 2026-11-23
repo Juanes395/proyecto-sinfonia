@@ -232,6 +232,161 @@
 .navbar-accion-secundaria:hover {
   background: var(--fondo-sutil);
 }
+/* ===== MENÚ DE CUENTA CON SESIÓN INICIADA ===== */
+.navbar-cuenta-web {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbar-avatar-btn,
+.navbar-avatar-mini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: var(--marca-primario);
+  color: var(--texto-sobre-marca, #10130a);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border: none;
+  flex-shrink: 0;
+}
+
+.navbar-avatar-btn {
+  cursor: pointer;
+}
+
+.navbar-avatar-btn:focus-visible {
+  outline: 2px solid var(--marca-primario);
+  outline-offset: 2px;
+}
+
+.navbar-cuenta-menu {
+  position: absolute;
+  top: calc(100% + 0.625rem);
+  right: 0;
+  min-width: 15.5rem;
+  background-color: var(--fondo-elevada, #18171f);
+  border: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.1));
+  border-radius: var(--radio-lg, 0.875rem);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  z-index: 60;
+}
+
+.navbar-cuenta-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.08));
+}
+
+.navbar-cuenta-datos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.navbar-cuenta-nombre {
+  font-size: 0.875rem;
+  color: var(--texto-principal);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-cuenta-correo,
+.navbar-cuenta-estado {
+  font-size: 0.75rem;
+  color: var(--texto-secundario);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-cuenta-salir {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--texto-principal);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.navbar-cuenta-salir:hover {
+  background-color: var(--fondo-sutil, rgba(255, 255, 255, 0.06));
+}
+
+.navbar-cuenta-salir:focus-visible {
+  outline: 2px solid var(--marca-primario);
+  outline-offset: -2px;
+}
+
+/* Tarjeta de cuenta móvil: oculta en escritorio */
+.navbar-cuenta-movil {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbar-cuenta-web {
+    display: none;
+  }
+
+  .navbar-cuenta-movil {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radio-lg, 0.875rem);
+    background-color: var(--fondo-elevada, rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.08));
+    margin-top: 0.5rem;
+  }
+
+  .navbar-cuenta-movil-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .navbar-avatar-movil {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--portada-1, #8e7bff);
+    color: var(--texto-principal, #f4f2f7);
+    font-size: 0.875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .navbar-cuenta-salir-movil {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--borde-sutil, rgba(255, 255, 255, 0.18));
+    color: var(--texto-principal);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
 
 /* VISTA DE ESCRITORIO (>= 1024px) */
 @media (min-width: 1024px) {

@@ -4,11 +4,12 @@ import Footer from "./components/Footer/Footer.jsx";
 import AvisoCookies from "./components/AvisoCookies/AvisoCookies.jsx";
 import InicioPublico from "./components/InicioPublico/InicioPublico.jsx";
 import { useTextos } from "./hooks/useTextos.js";
-import { leerCookie, guardarCookie } from "./utils/cookies.js";
+import { leerCookie, guardarCookie, guardarCookieSesion, borrarCookie } from "./utils/cookies.js";
 import Catalogo from "./components/Catalogo/Catalogo.jsx";
 import PanelAccesibilidad from "./components/PanelAccesibilidad/PanelAccesibilidad.jsx";
 import DetalleAlbum from "./components/DetalleAlbum/DetalleAlbum.jsx";
 import IniciarSesion from "./components/IniciarSesion/IniciarSesion.jsx";
+import { obtenerSesionActual, cerrarSesionApi } from "./services/api.js";
 
 function leerSeccion() {
   return window.location.hash.slice(1) || "inicio";
@@ -35,6 +36,57 @@ export default function App() {
     }
     return "es";
   });
+  // Estado de la cuenta autenticada (null = invitado)
+  const [usuario, setUsuario] = useState(null);
+
+  // Al cargar la app, verificamos si ya existe una sesión activa con GET /sesion
+  useEffect(() => {
+    const controlador = new AbortController();
+    let vigente = true;
+    const tokenGuardado = leerCookie("sintonia_token");
+    if (!tokenGuardado) return;
+
+    obtenerSesionActual(tokenGuardado, controlador.signal)
+      .then((cuenta) => {
+        if (vigente && cuenta) {
+          setUsuario(cuenta);
+        }
+      })
+      .catch((err) => {
+        if (!vigente || err.name === "AbortError") return;
+        // Si la API responde 401, la sesión venció o no es válida: limpiamos todo
+        if (err.status === 401) {
+          borrarCookie("sintonia_token");
+          setUsuario(null);
+        }
+      });
+
+    return () => {
+      vigente = false;
+      controlador.abort();
+    };
+  }, []);
+  // Se ejecuta cuando POST /sesion responde 200 en IniciarSesion
+  function manejarSesionIniciada({ usuario: nuevaCuenta, token, mantenerSesion }) {
+    if (token) {
+      guardarCookieSesion("sintonia_token", token, mantenerSesion);
+    }
+    setUsuario(nuevaCuenta || null);
+  }
+
+  // Se ejecuta al pulsar "Cerrar sesión" en el Navbar web o móvil
+  async function manejarCerrarSesion() {
+    const tokenActual = leerCookie("sintonia_token");
+    try {
+      await cerrarSesionApi(tokenActual);
+    } catch (err) {
+      console.error("Error al cerrar sesión en el servidor:", err);
+    } finally {
+      // Siempre limpiamos la cookie y el estado local para volver a invitado
+      borrarCookie("sintonia_token");
+      setUsuario(null);
+    }
+  }
   const [activo, setActivo] = useState(leerSeccion);
   // Estado para mostrar u ocultar el panel de accesibilidad
   const [accAbierto, setAccAbierto] = useState(false);
@@ -121,6 +173,8 @@ export default function App() {
             setAccAbierto((prev) => !prev)
           }
           ocultarEnMovil={activo.startsWith("albumes/")}
+          usuario={usuario}
+          onCerrarSesion={manejarCerrarSesion}
         />
       )}
       {/* Panel flotante de accesibilidad */}
@@ -173,6 +227,7 @@ export default function App() {
               setActivo(destino);
               window.location.hash = destino;
             }}
+            onSesionIniciada={manejarSesionIniciada}
           />
         )}
         {activo !== "inicio" && !activo.startsWith("catalogo") && !activo.startsWith("albumes/") && (

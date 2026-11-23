@@ -18,3 +18,14 @@ export function guardarCookie(nombre, valor, dias = 365) {
     const segundos = dias * 24 * 60 * 60 ; // Días a segundos
     document.cookie = `${nombre}=${encodeURIComponent(valor)}; max-age=${segundos}; path=/; SameSite=Lax`;
 }
+// Guarda el token de sesión (persistente 7 días si mantener=true, o solo mientras dure el navegador si mantener=false)
+export function guardarCookieSesion(nombre, valor, mantener = true) {
+  const codificado = encodeURIComponent(valor);
+  const expiracion = mantener ? `; max-age=${60 * 60 * 24 * 7}` : "";
+  document.cookie = `${nombre}=${codificado}; path=/; SameSite=Lax${expiracion}`;
+}
+
+// Elimina una cookie expirándola inmediatamente
+export function borrarCookie(nombre) {
+  document.cookie = `${nombre}=; path=/; max-age=0; SameSite=Lax`;
+}
