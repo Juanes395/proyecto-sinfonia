@@ -12,6 +12,7 @@ import IniciarSesion from "./components/IniciarSesion/IniciarSesion.jsx";
 import { obtenerSesionActual, cerrarSesionApi } from "./services/api.js";
 
 function leerSeccion() {
+
   return window.location.hash.slice(1) || "inicio";
 }
 // Valores iniciales por defecto del panel de accesibilidad

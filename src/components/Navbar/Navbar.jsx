@@ -246,7 +246,7 @@ export default function Navbar({ textos, cargando, error, recargar, idioma, camb
                                 )}
                                 {txtIngresar && (
                                     <a
-                                        href="#ingresar"
+                                        href="#ingresar "
                                         className="navbar-accion navbar-accion-secundaria"
                                         onClick={() => navegarA("ingresar")}
                                     >
